@@ -1,6 +1,7 @@
 import logoUAM
 import ejercicios.levantarDocker
 from ejercicios.ejercicio import Ejercicio
+from ejercicios.avance.avance_usuario import Avance_Usuario
 
 class Tipos:
     """Define los tipos de ejercicios que puede hacer el usuario"""
@@ -8,7 +9,7 @@ class Tipos:
     def practicarComandos(self, usuario):
         logo = logoUAM.printLogo()
         print(logo)
-        print(f'Ok {usuario.nombre}, vamos a practicar algunos comandos.')
+        print(f'Ok {usuario.username.upper()}, vamos a practicar algunos comandos.')
         print('\nElige de la siguiente lista cuál quieres practicar:')
 
         print("""
@@ -27,35 +28,39 @@ class Tipos:
         logo = logoUAM.printLogo()
         print(logo)
 
-        print(f'Ok {usuario.nombre}, vamos a realizar algunos ejercicios de'
-                + ' troubleshooting')
+        #SE INSTANCIA UN OBJETO EJERCICIO
+        listEjercicios = Ejercicio()
+        #SE RECUPERA LA LISTA DE EJERCICIOS EN LA BD
+        listEjercicios = listEjercicios.recuperarEjercicios("problema")
+    
+        print(f'De acuerdo {usuario.username.upper()}, vamos a realizar'
+            + ' algunos ejercicios de troubleshooting.')
         print('\nElige de la siguiente lista cuál quieres hacer:\n')
 
-        #SE INSTANCIA UN OBJETO EJERCICIO
-        getEjercicios = Ejercicio()
-        #SE RECUPERA LA LISTA DE EJERCICIOS
-        getEjercicios = getEjercicios.recuperarEjercicios()
-
-        listEjercicios = [e for e in getEjercicios]
-    
-        #MUESTRA LA LISTA DE EJERCICIOS
+        #MUESTRA LA LISTA DE PROBLEMAS
         for ejercicio in enumerate(listEjercicios, 1):
             print(ejercicio[0], ejercicio[1].descripcion)
-        
 
         opcion = int(input("\nTu opción: "))
-        #print(opcion)
-        #print(listEjercicios[opcion-1].nombre,
-        #    listEjercicios[opcion-1].id_ejercicio)
 
-        input()
+        #SE INSTANCIA UN OBJETO AVANCE_USUARIO
+        avance = Avance_Usuario()
+        
+        if opcion >= 1 and opcion <= len(listEjercicios):
+            #SE OBTIENE EL EJERCICIO Y EL NOMBRE DEL PROBLEMA
+            ejercicio = listEjercicios[opcion-1]
+            nombre = ejercicio.nombre
 
-        nombre = listEjercicios[opcion-1].nombre
+            #SE MANDA A LLAMAR AL SCRIPT DEL EJERCICIO
+            resultado = eval(f"ejercicios.{nombre}.vistaEjercicio(usuario)")
 
+            print(f'Tu resultado es el siguiente {resultado}')
 
-        resultado = eval(f"ejercicios.{nombre}.vistaEjercicio(usuario)")
-        print(f'Tu resultado es el siguiente {resultado}')
+            #SE ACTUALIZAN LAS ESTADÍSTICAS PARA EL USUARIO
+            actualizacion = avance.actualizarAvance(ejercicio, usuario, resultado[1])
 
+            if actualizacion >= 1:
+                print('Avance actualizado')
 
 
         return True

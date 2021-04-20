@@ -35,7 +35,6 @@ class BaseModel(Model):
 
 class Usuario(BaseModel):
     id_usuario = AutoField()
-    nombre = CharField(max_length = 30)
     username = CharField(max_length = 15, unique = True)
     password = CharField(max_length = 64)
 
@@ -51,32 +50,15 @@ class Avance_Usuario(BaseModel):
     ejercicio = ForeignKeyField(Ejercicio, backref = 'avance')
     resuelto = BooleanField()
     intento = SmallIntegerField()
-"""
-class Comando_Preparacion(BaseModel):
-    id_preparacion = AutoField()
-    comando = TextField()
-    orden = IntegerField()
-    ejercicio = ForeignKeyField(Ejercicio, backref = 'comando_preparacion')
-
-class Comando_Evaluacion(BaseModel):
-    id_evaluacion = AutoField()
-    comando = TextField()
-    orden = IntegerField()
-    ejercicio = ForeignKeyField(Ejercicio, backref = 'comando_evaluacion')
-"""
-
 
 #------------------- Crea las tablas en la base de datos -----------------------
-
 
 db.connect()
 
 db.create_tables([
     Usuario,
     Ejercicio,
-    Avance_Usuario,
-#    Comando_Preparacion,
-#    Comando_Evaluacion
+    Avance_Usuario
     ])
 
 db.close()

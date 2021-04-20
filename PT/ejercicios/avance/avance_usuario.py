@@ -8,9 +8,43 @@ class Avance_Usuario(BaseModel):
     usuario = ForeignKeyField(Usuario, backref = 'avance')
     ejercicio = ForeignKeyField(Ejercicio, backref = 'avance')
     resuelto = BooleanField(default = False)
-    intentos = SmallIntegerField(default = 0)
+    intento = SmallIntegerField(default = 0)
 
     def recuperarAvance(self):
         avance = []
 
         return avance
+
+
+    def actualizarAvance(self, ejercicio, usuario, resultado):
+        id_usuario = usuario.id_usuario
+        id_ejercicio = ejercicio.id_ejercicio
+
+        try:
+            estatus = (Avance_Usuario
+                        .select(Avance_Usuario)
+                        .where(
+                            Avance_Usuario.usuario == id_usuario, 
+                            Avance_Usuario.ejercicio == id_ejercicio)
+                        .get()
+                        ) 
+
+            estatus.intento = estatus.intento + 1
+            
+            if resultado == True and estatus.resuelto == False:
+                estatus.resuelto = True
+
+            actualizacion = estatus.save()
+
+        except:
+            avance = Avance_Usuario(
+                usuario = id_usuario,
+                ejercicio = id_ejercicio,
+                resuelto  = resultado,
+                intento = 1
+                )
+
+            actualizacion = avance.save()
+
+
+        return actualizacion

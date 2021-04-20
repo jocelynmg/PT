@@ -4,10 +4,9 @@ import hashlib
 
 
 class Usuario(BaseModel):
-    """Define un usuario con nombre, username y contraseña"""
+    """Define un usuario con username y contraseña"""
 
     id_usuario = AutoField()
-    nombre = CharField(max_length = 30)
     username = CharField(max_length = 15, unique = True)
     password = CharField(max_length = 64)
   
@@ -21,7 +20,6 @@ class Usuario(BaseModel):
 
         #SE DEFINEN LOS PARAMETROS DEL USUARIO
         usuario = Usuario(
-            nombre = self.nombre,
             username = self.username,
             password = cifrado.hexdigest()
             )
@@ -46,23 +44,20 @@ class Usuario(BaseModel):
 
         #SE MANDA EL QUERY Y REGRESA LA TUPLA DEL USUARIO SI EXISTE
         try:
-            resultado = (Usuario
-                        .get((Usuario.username == self.username) &
-                        (Usuario.password == cifrado.hexdigest())))
+            #resultado = (Usuario
+            #            .get((Usuario.username == self.username) &
+            #            (Usuario.password == cifrado.hexdigest())))
 
-            # """
-            # resultado = (Usuario
-            #             .select(Usuario)
-            #             .where(
-            #                 Usuario.username == self.username, 
-            #                 Usuario.password == cifrado.hexdigest())
-            #             .get()
-            #             )
-            # """
+            resultado = (Usuario
+                        .select(Usuario)
+                        .where(
+                            Usuario.username == self.username, 
+                            Usuario.password == cifrado.hexdigest())
+                        .get()
+                        )  
 
         #CACHA EL ERROR SI LOS DATOS NO SE ENCUENTRAN EN LA BASE
         except:
             resultado = [0, self]
 
         return resultado
-  

@@ -25,14 +25,12 @@ def prepararEjercicio():
         rm.wait()
         #rm.stdout.close()
     
-
     #SE APAGA EL SERVICIO DE DOCKER
     subprocess.run(
         'sudo systemctl stop docker.service'.split(),
         stdout = subprocess.DEVNULL,
         stderr = subprocess.DEVNULL
         )
-
 
 
 def evaluarEjercicio():
@@ -55,10 +53,10 @@ def evaluarEjercicio():
 
         if 'python' in line and '\"sleep 5\"' in line and 'PythonTest' in line:
             resultado = True
-            print('\n¡Ejercicio Correcto!\n')
+            #print('\n¡Ejercicio Correcto!\n')
     
-    if resultado == False:
-        print('\n¡Resultado incorrecto!, intenta otra vez\n')
+    #if resultado == False:
+    #    print('\n¡Resultado incorrecto!, intenta otra vez\n')
 
     return resultado
 
@@ -71,7 +69,7 @@ def vistaEjercicio(usuario):
     sentencia = """
     Pete tiene que levantar un Docker de python con el nombre "PythonTest"
     en modo DETACH y que ejecute el comando "sleep 5", pero tiene problemas
-    para lograrlo. Ayuda a Pete a levantar su Docker. Una vez que el contendor
+    para lograrlo. Ayuda a Pete a levantar su Docker. Una vez que el contenedor
     con las características mencionadas se haya ejecutado, se dará como bueno
     el ejercicio.
 

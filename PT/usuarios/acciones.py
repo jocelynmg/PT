@@ -14,7 +14,7 @@ class Acciones:
         #SE INCREMENTA CUANDO FALLA EL REGISTRO DE UN NUEVO USUARIO
         intento = 0
 
-        #SE EJECUTARÁ EL WHILE SIEMPRE QUE SE INGRESE UN USUARIO EXISTENTE
+        #SE EJECUTARÁ EL WHILE SIEMPRE QUE SE INGRESE UN USUARIO YA EXISTENTE
         while validacion:
 
             subprocess.call('clear')
@@ -23,19 +23,17 @@ class Acciones:
             print(' REGISTRO.')
             #PIDE LOS DATOS DE NUEVO USUARIO
             if intento == 0 :
-                print(' A continuación se te solicitará Nombre, Username y Password' 
+                print(' A continuación se te solicitará Username y Password' 
                 +' para completar tu registro:\n')
             #MUESTRA QUE EL USUARIO YA ESTA EN LA BASE DE DATOS
             else:
                 print(' ¡El usuario ingresado ya existe!, intenta con otro.\n')
 
-            nombre = input('  Nombre: ')
             username = input('  Usuario: ')
             password = getpass(prompt = '  Password: ')
 
             #SE CREA UNA INSTANCIA DE USUARIO
             usuario = user.Usuario(
-                nombre = nombre,
                 username = username,
                 password = password
                 )
@@ -54,7 +52,9 @@ class Acciones:
     def iniciarSesion(self):
         """Método para el inicio de sesión de los usuarios"""
 
+        #VALIDA EL INGRESO DE DATOS CORRECTOS POR EL USUARIO
         validacion = True
+        #SE INCREMENTA CUANDO EL USUARIO INGRASA UN DATO ERRÓNEO
         intento = 0
 
         while validacion:
@@ -63,8 +63,10 @@ class Acciones:
             logo = logoUAM.printLogo()
             print(logo)
             print(' INICIO DE SESIÓN.')
+            #PIDEO LOS DATOS DE INICIO DE SESIÓN
             if intento == 0:
                 print(' Ingresa tu usuario y password para accesar:\n')
+            #MUESTRA QUE LOS DATOS INGRESADOS ESTÁN MAL
             else:
                 print(' Datos incorrectos, verifica el usuario y/o contraseña.\n')
 
@@ -73,24 +75,23 @@ class Acciones:
                 password = getpass(prompt = '  Password: ')
 
                 usuario = user.Usuario(
-                    nombre = '',
                     username = username,
                     password = password
                     )
 
                 login = usuario.identificarseBD()
 
-                #Valida que los datos del usuario coninciden en la BD
+                #VALIDA QUE LOS DATOS DEL USUARIO HACEN MATCH EN LA BD
                 if username == login.username:
                     print(login.username)
-                    print(f'\n¡Bienvenid@ {login.nombre}!, {login.username}')
+                    print(f'\n¡Bienvenid@ {login.username}!')
                     print(f'\n¡Haz iniciado sesión como {username} y contraseña'
                                 + f' {password}!\n')
                     validacion = False
                 
                     return login
 
-            #Regresa un dato None cuando los datos no hacen match en la BD
+            #REGRESA UN DATO NONE CUANDO LOS DATOS NO HACEN MATCH EN LA BD
             except AttributeError:
                 print(' Datos incorrectos, inténtalo de nuevo')
                 intento = intento + 1
