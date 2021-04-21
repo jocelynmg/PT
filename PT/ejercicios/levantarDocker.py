@@ -73,7 +73,7 @@ def respuestaEjercicio():
     respuesta = "Intenta con la siguiente secuencia de comandos: \n\n" \
         + "       systemctl status docker.service \n" \
         + "       sudo systemctl start docker.service \n" \
-        + "       docker run -d --name=\"PythonTest\" python sleep 5 \n\n"
+        + "       docker run -d --name=PythonTest python sleep 5 \n\n"
 
     return respuesta
 
@@ -112,4 +112,4 @@ def vistaEjercicio(usuario):
     resultadoEjercicio = [usuario, resultado]
     sleep(2)
 
-    return(resultadoEjercicio)
+    return resultadoEjercicio

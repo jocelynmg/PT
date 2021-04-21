@@ -5,9 +5,9 @@ def clear():
         Funcion que limpia el escenario al inicio y al final de los ejercicios
     '''
     #Deleting all containers
-    p1 = sp.run('docker rm -f $(docker ps -aq)', capture_output=True, shell=True)
+    sp.run('docker rm -f $(docker ps -aq)', capture_output=True, shell=True)
     #Deleting all images
-    p2 = sp.run('docker rmi -f $(docker images -q)', capture_output=True, shell=True)
+    sp.run('docker rmi -f $(docker images -q)', capture_output=True, shell=True)
 
 def res1():
     return 'Docker stop $(docker ps -aq)'

@@ -1,5 +1,6 @@
 import subprocess, logoUAM
 import ejercicios.levantarDocker
+import ejercicios.stopCommand
 from ejercicios.ejercicio import Ejercicio
 from ejercicios.avance.avance_usuario import Avance_Usuario
 
@@ -41,8 +42,9 @@ def seleccionTipoEjercicio(usuario):
         print("""
             1. Retos para prácticar comandos de Docker
             2. Troubleshooting en Docker
-            3. Ver mis estádisticas
-            4. Salir 
+            3. Retos de comandos.
+            4. Ver mis estádisticas
+            5. Salir 
         """)
 
         opcion = input('Tu opción: ')
@@ -61,14 +63,20 @@ def seleccionTipoEjercicio(usuario):
                 #LANZA LA VISTA PARA PRACTICAR TROUBLESHOOTING
                 troubleshootingDocker(usuario)
                 seleccionTipoEjercicio(usuario)
-
+            
             elif opcion == '3':
+                validacion = False
+                #LANZA LA VISTA PARA LOS RETOS DE COMANDOS
+                retosDocker(usuario)
+                seleccionTipoEjercicio(usuario)
+
+            elif opcion == '4':
                 validacion = False
                 #LANZA LA VISTA PARA MOSTRAR LAS ESTADISTÍCAS
                 print(f'¡Vamos a ver tus estádisticas {usuario.username}!')
                 seleccionTipoEjercicio(usuario)
 
-            elif opcion == '4':
+            elif opcion == '5':
                 #SALE DE LA APLICACIÓN
                 print(f'¡Hasta luego, {usuario.username.upper()}!')
                 break
@@ -130,6 +138,35 @@ def troubleshootingDocker(usuario):
     return True
 
 
+def retosDocker(usuario):
+    logo = logoUAM.printLogo()
+    print(logo)
+
+    #SE INSTANCIA UN OBJETO EJERCICIO
+    listaEjercicios = Ejercicio()
+    #SE RECUPERA LA LISTA DE EJERCICIOS EN LA BD
+    listaEjercicios = listaEjercicios.recuperarEjercicios("reto")
+
+    print(f'De acuerdo {usuario.username.upper()}, vamos a realizar'
+        + ' algunos retos de comandos para Docker.')
+    print('\nElige de la siguiente lista cuál quieres hacer:\n')
+
+    #MUESTRA LA LISTA DE EJERCICIOS DE TIPO RETO
+    for ejercicio in enumerate(listaEjercicios, 1):
+        print(ejercicio[0], ejercicio[1].descripcion)
+
+    #SE ESPERA LA ELECCIÓN DEL USUARIO
+    opcion = int(input("\nTu opción: "))
+    
+    if opcion >= 1 and opcion <= len(listaEjercicios):
+        #SE OBTIENE EL EJERCICIO Y EL NOMBRE DEL RETO
+        ejercicio = listaEjercicios[opcion-1]
+
+        llamarEjercicio(ejercicio, usuario)
+
+    return True
+
+
 def llamarEjercicio(ejercicio, usuario):
 
     #SE INSTANCIA UN OBJETO AVANCE_USUARIO PARA GUARDAR EL AVANCE
@@ -174,7 +211,7 @@ def mostrarAyuda(ejercicio, usuario):
             1. Mostrar ayuda.
             2. Ver respuesta.
             3. Intentar de nuevo.
-            4. Yo puedo sol@. Regresar la lista de ejercicios.
+            4. Regresar al menú principal.
             """)
 
         opcion = input("Tu opción: ")
@@ -197,7 +234,6 @@ def mostrarAyuda(ejercicio, usuario):
                 
                 return True
 
-
             elif opcion == '2':
                 validacion = False
                 subprocess.call('clear')
@@ -211,6 +247,10 @@ def mostrarAyuda(ejercicio, usuario):
                     continue
 
                 return True
+
+            elif opcion == '3':
+                validacion = False
+                llamarEjercicio(ejercicio, usuario)
 
             elif opcion == '4':
                 validacion = False
