@@ -35,6 +35,7 @@ def seleccionTipoEjercicio(usuario):
         subprocess.call('clear')
         logo = logoUAM.printLogo()
         print(logo)
+        #SE LISTAN LOS TIPOS DE EJERCICIOS DISPONIBLES
         print(f'¡Hola {usuario.username.upper()}!,')
         print('A continuación puedes elegir el tipo de ejercicio a realizar')
         print("""
@@ -73,6 +74,7 @@ def seleccionTipoEjercicio(usuario):
                 break
             
             else:
+                #SE ATRAPA EL ERROR EN CASO DE QUE INTRODUZCAN OTRA OPCIÓN
                 raise ValueError('OpcionInvalida')
 
         except ValueError:
@@ -104,54 +106,65 @@ def troubleshootingDocker(usuario):
     print(logo)
 
     #SE INSTANCIA UN OBJETO EJERCICIO
-    listEjercicios = Ejercicio()
+    listaEjercicios = Ejercicio()
     #SE RECUPERA LA LISTA DE EJERCICIOS EN LA BD
-    listEjercicios = listEjercicios.recuperarEjercicios("problema")
+    listaEjercicios = listaEjercicios.recuperarEjercicios("problema")
 
     print(f'De acuerdo {usuario.username.upper()}, vamos a realizar'
         + ' algunos ejercicios de troubleshooting.')
     print('\nElige de la siguiente lista cuál quieres hacer:\n')
 
-    #MUESTRA LA LISTA DE PROBLEMAS
-    for ejercicio in enumerate(listEjercicios, 1):
+    #MUESTRA LA LISTA DE EJERCICIOS DE TIPO PROBLEMA
+    for ejercicio in enumerate(listaEjercicios, 1):
         print(ejercicio[0], ejercicio[1].descripcion)
 
     #SE ESPERA LA ELECCIÓN DEL USUARIO
     opcion = int(input("\nTu opción: "))
-
-    #SE INSTANCIA UN OBJETO AVANCE_USUARIO PARA GUARDAR EL AVANCE
-    avance = Avance_Usuario()
     
-    if opcion >= 1 and opcion <= len(listEjercicios):
+    if opcion >= 1 and opcion <= len(listaEjercicios):
         #SE OBTIENE EL EJERCICIO Y EL NOMBRE DEL PROBLEMA
-        ejercicio = listEjercicios[opcion-1]
-        nombreEjercicio = ejercicio.nombre
+        ejercicio = listaEjercicios[opcion-1]
 
-        #SE MANDA A LLAMAR AL SCRIPT DEL EJERCICIO
-        resultado = eval(f"ejercicios.{nombreEjercicio}.vistaEjercicio(usuario)")
-
-        #SE ACTUALIZAN LAS ESTADÍSTICAS PARA EL USUARIO
-        actualizacion = avance.actualizarAvance(ejercicio, usuario, resultado[1])
-
-        if actualizacion >= 1:
-            print('Avance actualizado')
-
-        if resultado[1] == False:
-            mostrarAyuda(resultado[1], nombreEjercicio)
-        else:
-            print(f'Tu resultado es CORRECTO, ¡Bien hecho!\n')
+        llamarEjercicio(ejercicio, usuario)
 
     return True
 
 
-def mostrarAyuda(resultado, nombreEjercicio):
+def llamarEjercicio(ejercicio, usuario):
+
+    #SE INSTANCIA UN OBJETO AVANCE_USUARIO PARA GUARDAR EL AVANCE
+    avance = Avance_Usuario()
+    #SE OBTIENE EL NOMBRE DEL EJERCICIO
+    nombreEjercicio = ejercicio.nombre
+
+    #SE MANDA A LLAMAR AL SCRIPT DEL EJERCICIO
+    resultado = eval(f"ejercicios.{nombreEjercicio}.vistaEjercicio(usuario)")
+
+    #SE ACTUALIZAN LAS ESTADÍSTICAS PARA EL USUARIO
+    actualizacion = avance.actualizarAvance(ejercicio, usuario, resultado[1])
+
+    if actualizacion >= 1:
+        print('Avance actualizado')
+
+    if resultado[1] == False:
+        mostrarAyuda(ejercicio, usuario)
+    else:
+        print(f'Tu resultado es CORRECTO, ¡Bien hecho!\n')
+        input("Da enter para continuar")
+
+
+    return resultado
+
+
+def mostrarAyuda(ejercicio, usuario):
     
     validacion = True
+    logo = logoUAM.printLogo()
+    nombreEjercicio = ejercicio.nombre
 
     while validacion:
 
         subprocess.call('clear')
-        logo = logoUAM.printLogo()
         print(logo)            
         print(f'¡Tu resultado es INCORRECTO!\n')
         print("¿Necesitas ayuda? A continuación puedes elegir entre las "
@@ -159,7 +172,8 @@ def mostrarAyuda(resultado, nombreEjercicio):
         print("""
             1. Mostrar ayuda.
             2. Ver respuesta.
-            3. Yo puedo sol@. Regresar la lista de ejercicios.
+            3. Intentar de nuevo.
+            4. Yo puedo sol@. Regresar la lista de ejercicios.
             """)
 
         opcion = input("Tu opción: ")
@@ -169,15 +183,35 @@ def mostrarAyuda(resultado, nombreEjercicio):
 
             if opcion == '1':
                 validacion = False
-                print("Se llama a la ayuda del ejercicio.")
-                input()
+                subprocess.call('clear')
+                print(logo)            
+                print("Aquí tienes una pequeña ayuda:\n")
+                print(eval(f"ejercicios.{nombreEjercicio}.ayudaEjercicio()"))
+                reintento = input("\n¿Quieres intentar de nuevo? [si/no]: ")
+                
+                if reintento == 'si':
+                    llamarEjercicio(ejercicio, usuario)
+                elif reintento == 'no':
+                    continue
+                
+                return True
+
 
             elif opcion == '2':
                 validacion = False
-                print("Se llama el resultado del ejercicio")
-                input()
+                subprocess.call('clear')
+                print(logo)
+                print(eval(f"ejercicios.{nombreEjercicio}.respuestaEjercicio()"))
+                reintento = input("\n¿Quieres intentar de nuevo? [si/no]: ")
+                
+                if reintento == 'si':
+                    llamarEjercicio(ejercicio, usuario)
+                elif reintento == 'no':
+                    continue
 
-            elif opcion == '3':
+                return True
+
+            elif opcion == '4':
                 validacion = False
 
             else:

@@ -61,6 +61,23 @@ def evaluarEjercicio():
     return resultado
 
 
+def ayudaEjercicio():
+
+    ayuda = "Intenta revisar el estado del demonio de Docker\n\n"
+
+    return ayuda
+
+
+def respuestaEjercicio():
+
+    respuesta = "Intenta con la siguiente secuencia de comandos: \n\n" \
+        + "       systemctl status docker.service \n" \
+        + "       sudo systemctl start docker.service \n" \
+        + "       docker run -d --name=\"PythonTest\" python sleep 5 \n\n"
+
+    return respuesta
+
+
 def vistaEjercicio(usuario):
     subprocess.run('clear')
 
@@ -94,6 +111,5 @@ def vistaEjercicio(usuario):
 
     resultadoEjercicio = [usuario, resultado]
     sleep(2)
-    input('\nDa enter para continuar.\n')
 
     return(resultadoEjercicio)
