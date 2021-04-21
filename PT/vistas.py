@@ -146,6 +146,7 @@ def llamarEjercicio(ejercicio, usuario):
     if actualizacion >= 1:
         print('Avance actualizado')
 
+    #SI EL RESULTADO ESTÁ MAL SE MANDA A LLAMAR EL MODULO DE AYUDA
     if resultado[1] == False:
         mostrarAyuda(ejercicio, usuario)
     else:
