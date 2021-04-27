@@ -70,10 +70,13 @@ def ayudaEjercicio():
 
 def respuestaEjercicio():
 
-    respuesta = "Intenta con la siguiente secuencia de comandos: \n\n" \
-        + "       systemctl status docker.service \n" \
-        + "       sudo systemctl start docker.service \n" \
-        + "       docker run -d --name=PythonTest python sleep 5 \n\n"
+    respuesta = """
+    Intenta con la siguiente secuencia de comandos:
+
+        systemctl status docker.service        --> Valida el estado de Docker
+        sudo systemctl start docker.service    --> Levanta el servicio Docker
+        docker run -d --name=PythonTest python sleep 5
+    """
 
     return respuesta
 
@@ -84,9 +87,9 @@ def vistaEjercicio(usuario):
     logo = logoUAM.printLogo()
     print(logo)
     sentencia = """
-    Pete tiene que levantar un Docker de python con el nombre "PythonTest"
+    Uamito tiene que levantar un contenedor de python con el nombre "PythonTest"
     en modo DETACH y que ejecute el comando "sleep 5", pero tiene problemas
-    para lograrlo. Ayuda a Pete a levantar su Docker. Una vez que el contenedor
+    para lograrlo. Ayuda a Uamito a levantar su Docker. Una vez que el contenedor
     con las características mencionadas se haya ejecutado, se dará como bueno
     el ejercicio.
 

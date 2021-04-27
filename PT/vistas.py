@@ -1,8 +1,12 @@
 import subprocess, logoUAM
-import ejercicios.levantarDocker
-import ejercicios.stopCommand
 from ejercicios.ejercicio import Ejercicio
 from ejercicios.avance.avance_usuario import Avance_Usuario
+import ejercicios.levantarDocker
+import ejercicios.rmCommand
+import ejercicios.rmiCommand
+import ejercicios.stopCommand
+import ejercicios.miDocker
+import ejercicios.miNetwork
 
 def inicio():
     """Muestra pantalla de bienvenida a los usuarios para iniciar sesión
@@ -40,9 +44,9 @@ def seleccionTipoEjercicio(usuario):
         print(f'¡Hola {usuario.username.upper()}!,')
         print('A continuación puedes elegir el tipo de ejercicio a realizar')
         print("""
-            1. Retos para prácticar comandos de Docker
+            1. Prácticar comandos de Docker
             2. Troubleshooting en Docker
-            3. Retos de comandos.
+            3. Retos de comandos en Docker
             4. Ver mis estádisticas
             5. Salir 
         """)
@@ -93,18 +97,28 @@ def seleccionTipoEjercicio(usuario):
 def practicarComandos(usuario):
     logo = logoUAM.printLogo()
     print(logo)
-    print(f'Ok {usuario.username.upper()}, vamos a practicar algunos comandos.')
-    print('\nElige de la siguiente lista cuál quieres practicar:')
 
-    print("""
-    1. Prácticar comando <run>.
-    2. Prácticar comando <rm>.
-    3. Prácticar más comandos.
-    4. Regresar.
-    """)
+    #SE INSTANCIA UN OBJETO EJERCICIO
+    listaEjercicios = Ejercicio()
+    #SE RECUPERA LA LISTA DE EJERCICIOS EN LA BD
+    listaEjercicios = listaEjercicios.recuperarEjercicios("practica")
 
-    opcion = input("Tu opción: ")
-    opcion = opcion
+    print(f'De acuerdo {usuario.username.upper()}, vamos a realizar'
+        + ' algunos ejercicios de práctica.')
+    print('\nElige de la siguiente lista cuál quieres hacer:\n')
+
+    #MUESTRA LA LISTA DE EJERCICIOS DE TIPO PRACTICA
+    for ejercicio in enumerate(listaEjercicios, 1):
+        print(ejercicio[0], ejercicio[1].descripcion)
+
+    #SE ESPERA LA ELECCIÓN DEL USUARIO
+    opcion = int(input("\nTu opción: "))
+    
+    if opcion >= 1 and opcion <= len(listaEjercicios):
+        #SE OBTIENE EL EJERCICIO Y EL NOMBRE DEL PRACTICA
+        ejercicio = listaEjercicios[opcion-1]
+
+        llamarEjercicio(ejercicio, usuario)
 
     return True
 

@@ -10,13 +10,15 @@ class Avance_Usuario(BaseModel):
     resuelto = BooleanField(default = False)
     intento = SmallIntegerField(default = 0)
 
-    def recuperarAvance(self):
+    def recuperarAvance(self, ejercicio, usuario):
         avance = []
 
         return avance
 
 
     def actualizarAvance(self, ejercicio, usuario, resultado):
+        """Esta función actualizará los avances del usuarios"""
+
         id_usuario = usuario.id_usuario
         id_ejercicio = ejercicio.id_ejercicio
 
