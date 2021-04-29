@@ -21,6 +21,20 @@ def prepararEjercicio():
     return True
 
 
+def limpiarEscenario():
+
+    #SE ELIMINAN TODOS LOS CONTENEDORES
+    sp.run('docker rm -f $(docker ps -aq)', capture_output=True, shell=True)
+
+    #SE ELIMINAN TODAS LAS IMAGENES
+    sp.run('docker rmi -f $(docker images -q)', capture_output=True, shell=True)
+
+    #SE BORRAN TODAS LAS REDES PERSONALIZADAS
+    sp.run('docker network rm $(docker network ls -q)', capture_output=True, shell=True)
+
+    return True
+
+
 def evaluarEjercicio():
     resultado = False
     validaImagen = False
@@ -85,7 +99,8 @@ def evaluarEjercicio():
         if ip == '10.172.14.1' and gw == '10.172.14.6' and msk == 29:
             validaNetwork = True
             
-        
+    limpiarEscenario()
+
     if validaCaracteristicas == True and validaImagen == True and validaNetwork == True:
         resultado = True
 
@@ -94,7 +109,22 @@ def evaluarEjercicio():
 
 def ayudaEjercicio():
 
-    ayuda = "Intenta revisar el estado del demonio de Docker\n\n"
+    ayuda = """
+    Para agregar un contendor a una red, primero debes crearla con el siguiente
+    comando:
+
+    \tdocker network create
+
+    Recuerda incluir el ID de la red y la máscara con '/' ejemplo:
+
+    \t192.168.0.0/24
+
+    También recuerda los siguientes comandos de Docker:
+
+    -d \t Modo detach
+    -p \t Mapeo de puertos
+    
+    """
 
     return ayuda
 
@@ -102,7 +132,7 @@ def ayudaEjercicio():
 def respuestaEjercicio():
 
     respuesta = """
-    Intenta con la siguiente secuencia de comandos: 
+    La siguiente secuencia de comandos da solución al ejercicio: 
 
     docker network create --subnet 10.172.14.0/29 --gateway 10.172.14.6 miRed
     docker run -dit -p 443:443 --network=miRed --ip 10.172.14.1 --name=MiNetwork ubuntu

@@ -18,6 +18,17 @@ def prepararEjercicio():
     return True
 
 
+def limpiarEscenario():
+
+    #SE ELIMINAN TODOS LOS CONTENEDORES
+    sp.run('docker rm -f $(docker ps -aq)', capture_output=True, shell=True)
+
+    #SE ELIMINAN TODAS LAS IMAGENES
+    sp.run('docker rmi -f $(docker images -q)', capture_output=True, shell=True)
+
+    return True
+
+
 def evaluarEjercicio():
     resultado = False
     validaImagen = False
@@ -38,7 +49,6 @@ def evaluarEjercicio():
 
     #SE EVALUA QUE SE HAYA COLOCADO CORRECTAMENTE EL NOMBRE DEL CONTENEDOR
     if output.stdout == '[]\n':
-        print(output.stdout)
         return False
 
     else:
@@ -61,7 +71,9 @@ def evaluarEjercicio():
 
         if n == '/MiDocker' and hp == '80' and ain == False and aout == False:
             validaCaracteristicas = True
-        
+    
+    limpiarEscenario()
+
     if validaCaracteristicas == True and validaImagen == True:
         resultado = True
 
@@ -70,17 +82,25 @@ def evaluarEjercicio():
 
 def ayudaEjercicio():
 
-    ayuda = "Intenta revisar el estado del demonio de Docker\n\n"
+    ayuda = """
+    Recuerda que en Docker puedes utilizar estas banderas.
+
+    -p \t Mapeo de puertos
+    -d \t Modo detach
+
+    """
 
     return ayuda
 
 
 def respuestaEjercicio():
 
-    respuesta = "Intenta con la siguiente secuencia de comandos: \n\n" \
-        + "       systemctl status docker.service \n" \
-        + "       sudo systemctl start docker.service \n" \
-        + "       docker run -d --name=PythonTest python sleep 5 \n\n"
+    respuesta = """
+    El ejercicio se puede resolver con el siguiente comando:
+
+    docker run -dit --name=MiDocker -p 80:5000 ubuntu
+    
+    """
 
     return respuesta
 
@@ -111,10 +131,9 @@ def vistaEjercicio(usuario):
 
     #UNA VEZ QUE EL USUARIO ENTRA EXIT EN LA TERMINAL, SE EVALUA EL EJERCICIO
     print('\nEvaluando ejercicio...')
-    sleep(1)
+    #sleep(1)
     resultado = evaluarEjercicio()
 
     resultadoEjercicio = [usuario, resultado]
-    sleep(2)
 
     return resultadoEjercicio

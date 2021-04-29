@@ -10,14 +10,22 @@ def prepararEjercicio():
 
     #SE ELIMINAN TODAS LAS IMAGENES
     sp.run('docker rmi -f $(docker images -q)', capture_output=True, shell=True)
-
-    #SE BORRAN TODAS LAS REDES PERSONALIZADAS
-    sp.run('docker network rm $(docker network ls -q)', capture_output=True, shell=True)
     
     #SE CARGA LA IMAGEN QUE SE VA A UTILIZAR
     sp.run(['docker','load','-i','/home/pete/Escritorio/ProyectoTerminal/debian.tar'],\
                                     capture_output=False)
     
+    return True
+
+
+def limpiarEscenario():
+
+    #SE ELIMINAN TODOS LOS CONTENEDORES
+    sp.run('docker rm -f $(docker ps -aq)', capture_output=True, shell=True)
+
+    #SE ELIMINAN TODAS LAS IMAGENES
+    sp.run('docker rmi -f $(docker images -q)', capture_output=True, shell=True)
+
     return True
 
 
@@ -71,6 +79,7 @@ def evaluarEjercicio():
             h == 'iot' and r == 'unless-stopped' and t == 'TZ=America/Mexico_City':
             validaCaracteristicas = True
 
+    limpiarEscenario()
         
     if validaCaracteristicas == True and validaImagen == True:
         resultado = True
@@ -80,7 +89,20 @@ def evaluarEjercicio():
 
 def ayudaEjercicio():
 
-    ayuda = "Intenta revisar el estado del demonio de Docker\n\n"
+    ayuda = """
+    Recuerda que para cambiar la zona horaria del contenedor debes enviar la 
+    siguiente variable de entorno.
+
+    \tTZ
+
+    Toma en cuenta las siguientes banderas de Docker:
+
+    -d \t Modo detach
+    -p \t Mapeo de puertos
+    -h \t Hostname
+    --restart  Politica de reinicio
+    
+    """
 
     return ayuda
 
@@ -88,7 +110,7 @@ def ayudaEjercicio():
 def respuestaEjercicio():
 
     respuesta = """
-    Intenta con la siguiente secuencia de comandos: 
+    El siguiente comando da solución al ejercicio: 
 
     docker run -dit --name MiTimeZone -h iot -p 80:80 --restart=unless-stopped -e TZ="America/Mexico_City" debian
     """
@@ -128,6 +150,6 @@ def vistaEjercicio(usuario):
     resultado = evaluarEjercicio()
 
     resultadoEjercicio = [usuario, resultado]
-    sleep(2)
+    #sleep(2)
 
     return resultadoEjercicio

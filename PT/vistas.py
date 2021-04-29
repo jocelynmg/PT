@@ -108,14 +108,14 @@ def seleccionEjercicio(usuario, tipo):
     #MUESTRA LA LISTA DE EJERCICIOS
     for ejercicio in enumerate(listaEjercicios, 1):
         listAvance = avance.recuperarAvance(ejercicio[1], usuario)
-        print(ejercicio[0], ejercicio[1].descripcion, end='\t')
+        print(f"\t{ejercicio[0]}. {ejercicio[1].descripcion}".ljust(40), end=" ")
         
         try:
-            print("Intentos: ", listAvance.intento, "\tResuelto: ", listAvance.resuelto)
+            print(f"Intentos: {listAvance.intento}\tResuelto: {listAvance.resuelto}".rjust(40))
         except:
-            print("Intentos: 0, Resuelto: No")
+            print("Intentos: 0\tResuelto: No".rjust(20))
     
-    print(len(listaEjercicios)+1, "Regresar al menú principal")
+    print(f"\t{len(listaEjercicios)+1}. Regresar al menú principal")
 
     #SE ESPERA LA ELECCIÓN DEL USUARIO
     opcion = int(input("\nTu opción: "))
@@ -145,13 +145,13 @@ def llamarEjercicio(ejercicio, usuario):
     actualizacion = avance.actualizarAvance(ejercicio, usuario, resultado[1])
 
     if actualizacion >= 1:
-        print('Avance actualizado')
+        print('\nAvance actualizado')
 
     #SI EL RESULTADO ESTÁ MAL SE MANDA A LLAMAR EL MODULO DE AYUDA
     if resultado[1] == False:
         mostrarAyuda(ejercicio, usuario)
     else:
-        print(f'Tu resultado es CORRECTO, ¡Bien hecho!\n')
+        print(f'\n Tu resultado es CORRECTO, ¡Bien hecho! \n'.center(30, "="))
         input("Da enter para continuar")
 
 
