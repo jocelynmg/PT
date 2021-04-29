@@ -1,0 +1,1 @@
+print('Algo es 18'.center(25,'-'))

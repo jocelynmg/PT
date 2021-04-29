@@ -15,7 +15,7 @@ def prepararEjercicio():
     sp.run('docker network rm $(docker network ls -q)', capture_output=True, shell=True)
     
     #SE CARGA LA IMAGEN QUE SE VA A UTILIZAR
-    sp.run(['docker','load','-i','/home/pete/Escritorio/ProyectoTerminal/PT/util/images/ubuntu.tar'],\
+    sp.run(['docker','load','-i','/home/pete/Escritorio/ProyectoTerminal/debian.tar'],\
                                     capture_output=False)
     
     return True
@@ -25,22 +25,18 @@ def evaluarEjercicio():
     resultado = False
     validaImagen = False
     validaCaracteristicas = False
-    validaNetwork = False
-    ip = ''
-    gw = ''
     hp = '0'
-    msk = 0
 
     #SE ENVÍA EL COMANDO PARA EVALUAR LA IMAGEN UTILIZADA EN EL CONTENEDOR
-    listImagen = ['docker', 'ps', '--filter', 'name=MiNetwork',\
-                            '--filter', 'ancestor=ubuntu', '-aq']
+    listImagen = ['docker', 'ps', '--filter', 'name=MiTimeZone',\
+                            '--filter', 'ancestor=debian', '-aq']
     testImagen = sp.run(listImagen, capture_output=True, encoding='utf-8')
     
     if len(testImagen.stdout) > 0:
         validaImagen = True
 
     #SE ENVÍA EL COMANDO PARA EL INSPECT DEL CONTENEDOR
-    output = sp.run(['docker','inspect', 'MiNetwork'], capture_output=True,\
+    output = sp.run(['docker','inspect', 'MiTimeZone'], capture_output=True,\
                                                             encoding='utf-8')    
 
     #SE EVALUA QUE SE HAYA COLOCADO CORRECTAMENTE EL NOMBRE DEL CONTENEDOR
@@ -51,42 +47,32 @@ def evaluarEjercicio():
     else:
         #SE OBTIENE UN DICCIONARIO DEL COMANDO DOCKER INSPECT
         inspect = json.loads(output.stdout)[0]
-        #NAME, HOSTPORT, ATTACH STDIN, STDOUT, STDERR
+        
+        #SE EVALUA NAME, HOSTNAME, RESTART POLICY, TIME_ZONE
         n = inspect.get('Name')
+        h = inspect.get('Config').get('Hostname')
+        r = inspect.get('HostConfig').get('RestartPolicy').get('Name')
+        t = inspect.get('Config').get('Env')[0]
+
+        #SE EVALUA LA OPCIÓN DE DETACH
+        ain = inspect.get('Config').get('AttachStdin')
+        aout = inspect.get('Config').get('AttachStdout')
         
         #SE EVALUA TANTO EL EXPOSED PORT COMO EL HOST PORT
         try:
             hp = inspect.get('NetworkSettings').get('Ports')\
-                                .get('443/tcp')[0].get('HostPort')
+                                .get('80/tcp')[0].get('HostPort')
 
         except TypeError as err:
             err = 'Error: {}'.format(err)
         
-        #SE EVALUA LA OPCIÓN DE DETACH
-        ain = inspect.get('Config').get('AttachStdin')
-        aout = inspect.get('Config').get('AttachStdout')
 
-        if n == '/MiNetwork' and hp == '443' and ain == False and aout == False:
+        if n == '/MiTimeZone' and hp == '80' and ain == False and aout == False and\
+            h == 'iot' and r == 'unless-stopped' and t == 'TZ=America/Mexico_City':
             validaCaracteristicas = True
-                
-        #SE EVALUA LA NETWORK
-        try:
-            ip = inspect.get('NetworkSettings').get('Networks').get('miRed')\
-                                            .get('IPAddress')
 
-            gw = inspect.get('NetworkSettings').get('Networks').get('miRed')\
-                                            .get('Gateway')
-            
-            msk = inspect.get('NetworkSettings').get('Networks').get('miRed')\
-                                            .get('IPPrefixLen')
-        except TypeError as err:
-            err = 'Error: {}'.format(err)
-
-        if ip == '10.172.14.1' and gw == '10.172.14.6' and msk == 29:
-            validaNetwork = True
-            
         
-    if validaCaracteristicas == True and validaImagen == True and validaNetwork == True:
+    if validaCaracteristicas == True and validaImagen == True:
         resultado = True
 
     return resultado
@@ -104,8 +90,7 @@ def respuestaEjercicio():
     respuesta = """
     Intenta con la siguiente secuencia de comandos: 
 
-    docker network create --subnet 10.172.14.0/29 --gateway 10.172.14.6 miRed
-    docker run -dit -p 443:443 --network=miRed --ip 10.172.14.1 --name=MiNetwork ubuntu
+    docker run -dit --name MiTimeZone -h iot -p 80:80 --restart=unless-stopped -e TZ="America/Mexico_City" debian
     """
 
     return respuesta
@@ -117,17 +102,18 @@ def vistaEjercicio(usuario):
     logo = logoUAM.printLogo()
     print(logo)
     sentencia = """
-    Levanta un contenedor de Ubuntu llamado "MiNetwork" en modo DETACH y con la
-    terminal interactiva, con una IP 10.172.14.1 del segmento 10.172.14.0/29 
-    de una red que se llame "miRed", el gateway de la red debe ser la IP
-    10.172.14.6. Mapear el puerto 443 del host al puerto 443 del contenedor.
+    Levanta un contenedor de Debian llamado "MiTimeZone" en modo DETACH y con la
+    terminal interactiva, con zona horaria de la Ciudad de México (America/Mexico_City)
+    y con una política de reinicio hasta que alguien lo detenga. Mapear el
+    puerto 80 del host al puerto 80 del contenedor. El hostname del contenedor
+    debe ser "iot".
 
     Escribe 'exit' cuando hayas finalizado o en cualquier otro momento para 
     regresar a la aplicación principal.
     """
     print(sentencia)
 
-    input('Da enter para cargar tu escenario...\n')
+    input('Da enter para cargar tu escenario...')
 
     #SE LLAMA A LA FUNCIÓN PARA PREPARAR EL EJERCICIO
     prepararEjercicio()

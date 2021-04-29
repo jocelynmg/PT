@@ -10,9 +10,24 @@ class Avance_Usuario(BaseModel):
     resuelto = BooleanField(default = False)
     intento = SmallIntegerField(default = 0)
 
-    def recuperarAvance(self, ejercicio, usuario):
-        avance = []
 
+    def recuperarAvance(self, ejercicio, usuario):
+        """En esta función se recuperan los avances del usuario"""
+
+        id_usuario = usuario.id_usuario
+        id_ejercicio = ejercicio.id_ejercicio
+
+        try:
+            avance = (Avance_Usuario
+                    .select(Avance_Usuario)
+                    .where(
+                        Avance_Usuario.usuario == id_usuario, 
+                        Avance_Usuario.ejercicio == id_ejercicio)
+                    .get()
+                    ) 
+
+        except:
+            avance = "No se encontraron registros"
         return avance
 
 
@@ -32,7 +47,7 @@ class Avance_Usuario(BaseModel):
                         ) 
 
             estatus.intento = estatus.intento + 1
-            
+    
             if resultado == True and estatus.resuelto == False:
                 estatus.resuelto = True
 

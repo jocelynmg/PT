@@ -7,6 +7,8 @@ import ejercicios.rmiCommand
 import ejercicios.stopCommand
 import ejercicios.miDocker
 import ejercicios.miNetwork
+import ejercicios.miTimeZone
+
 
 def inicio():
     """Muestra pantalla de bienvenida a los usuarios para iniciar sesión
@@ -47,8 +49,7 @@ def seleccionTipoEjercicio(usuario):
             1. Prácticar comandos de Docker
             2. Troubleshooting en Docker
             3. Retos de comandos en Docker
-            4. Ver mis estádisticas
-            5. Salir 
+            4. Salir 
         """)
 
         opcion = input('Tu opción: ')
@@ -59,28 +60,22 @@ def seleccionTipoEjercicio(usuario):
             if opcion == '1':
                 validacion = False
                 #LANZA LA VISTA PARA PRACTICAR COMANDOS
-                practicarComandos(usuario)
+                seleccionEjercicio(usuario, "practica")
                 seleccionTipoEjercicio(usuario)
 
             elif opcion == '2':
                 validacion = False
                 #LANZA LA VISTA PARA PRACTICAR TROUBLESHOOTING
-                troubleshootingDocker(usuario)
+                seleccionEjercicio(usuario, "problema")
                 seleccionTipoEjercicio(usuario)
             
             elif opcion == '3':
                 validacion = False
                 #LANZA LA VISTA PARA LOS RETOS DE COMANDOS
-                retosDocker(usuario)
+                seleccionEjercicio(usuario, "reto")
                 seleccionTipoEjercicio(usuario)
 
             elif opcion == '4':
-                validacion = False
-                #LANZA LA VISTA PARA MOSTRAR LAS ESTADISTÍCAS
-                print(f'¡Vamos a ver tus estádisticas {usuario.username}!')
-                seleccionTipoEjercicio(usuario)
-
-            elif opcion == '5':
                 #SALE DE LA APLICACIÓN
                 print(f'¡Hasta luego, {usuario.username.upper()}!')
                 break
@@ -94,89 +89,44 @@ def seleccionTipoEjercicio(usuario):
             continue
 
 
-def practicarComandos(usuario):
+def seleccionEjercicio(usuario, tipo):
+
     logo = logoUAM.printLogo()
     print(logo)
-
-    #SE INSTANCIA UN OBJETO EJERCICIO
-    listaEjercicios = Ejercicio()
-    #SE RECUPERA LA LISTA DE EJERCICIOS EN LA BD
-    listaEjercicios = listaEjercicios.recuperarEjercicios("practica")
-
-    print(f'De acuerdo {usuario.username.upper()}, vamos a realizar'
-        + ' algunos ejercicios de práctica.')
-    print('\nElige de la siguiente lista cuál quieres hacer:\n')
-
-    #MUESTRA LA LISTA DE EJERCICIOS DE TIPO PRACTICA
-    for ejercicio in enumerate(listaEjercicios, 1):
-        print(ejercicio[0], ejercicio[1].descripcion)
-
-    #SE ESPERA LA ELECCIÓN DEL USUARIO
-    opcion = int(input("\nTu opción: "))
+    avance = Avance_Usuario()
     
-    if opcion >= 1 and opcion <= len(listaEjercicios):
-        #SE OBTIENE EL EJERCICIO Y EL NOMBRE DEL PRACTICA
-        ejercicio = listaEjercicios[opcion-1]
-
-        llamarEjercicio(ejercicio, usuario)
-
-    return True
-
-
-def troubleshootingDocker(usuario):
-    logo = logoUAM.printLogo()
-    print(logo)
 
     #SE INSTANCIA UN OBJETO EJERCICIO
     listaEjercicios = Ejercicio()
-    #SE RECUPERA LA LISTA DE EJERCICIOS EN LA BD
-    listaEjercicios = listaEjercicios.recuperarEjercicios("problema")
-
-    print(f'De acuerdo {usuario.username.upper()}, vamos a realizar'
-        + ' algunos ejercicios de troubleshooting.')
-    print('\nElige de la siguiente lista cuál quieres hacer:\n')
-
-    #MUESTRA LA LISTA DE EJERCICIOS DE TIPO PROBLEMA
-    for ejercicio in enumerate(listaEjercicios, 1):
-        print(ejercicio[0], ejercicio[1].descripcion)
-
-    #SE ESPERA LA ELECCIÓN DEL USUARIO
-    opcion = int(input("\nTu opción: "))
-    
-    if opcion >= 1 and opcion <= len(listaEjercicios):
-        #SE OBTIENE EL EJERCICIO Y EL NOMBRE DEL PROBLEMA
-        ejercicio = listaEjercicios[opcion-1]
-
-        llamarEjercicio(ejercicio, usuario)
-
-    return True
-
-
-def retosDocker(usuario):
-    logo = logoUAM.printLogo()
-    print(logo)
-
-    #SE INSTANCIA UN OBJETO EJERCICIO
-    listaEjercicios = Ejercicio()
-    #SE RECUPERA LA LISTA DE EJERCICIOS EN LA BD
-    listaEjercicios = listaEjercicios.recuperarEjercicios("reto")
+    #SE RECUPERA LA LISTA DE EJERCICIOS EN LA BD DE ACUERDO AL TIPO DE EJERCICIO
+    listaEjercicios = listaEjercicios.recuperarEjercicios(tipo)
 
     print(f'De acuerdo {usuario.username.upper()}, vamos a realizar'
         + ' algunos retos de comandos para Docker.')
     print('\nElige de la siguiente lista cuál quieres hacer:\n')
 
-    #MUESTRA LA LISTA DE EJERCICIOS DE TIPO RETO
+    #MUESTRA LA LISTA DE EJERCICIOS
     for ejercicio in enumerate(listaEjercicios, 1):
-        print(ejercicio[0], ejercicio[1].descripcion)
+        listAvance = avance.recuperarAvance(ejercicio[1], usuario)
+        print(ejercicio[0], ejercicio[1].descripcion, end='\t')
+        
+        try:
+            print("Intentos: ", listAvance.intento, "\tResuelto: ", listAvance.resuelto)
+        except:
+            print("Intentos: 0, Resuelto: No")
+    
+    print(len(listaEjercicios)+1, "Regresar al menú principal")
 
     #SE ESPERA LA ELECCIÓN DEL USUARIO
     opcion = int(input("\nTu opción: "))
     
     if opcion >= 1 and opcion <= len(listaEjercicios):
-        #SE OBTIENE EL EJERCICIO Y EL NOMBRE DEL RETO
+        #SE OBTIENE EL EJERCICIO Y EL NOMBRE
         ejercicio = listaEjercicios[opcion-1]
 
         llamarEjercicio(ejercicio, usuario)
+    else:
+        pass
 
     return True
 
