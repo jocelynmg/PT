@@ -13,7 +13,19 @@ def prepararEjercicio():
 
 def ayudaEjercicio():
 
-    ayuda = "Aquí se pondrá la ayuda el ejercicio\n\n"
+    ayuda = """
+    + Intenta hacer uso de dos comandos, asigna la salida de los IDs al comando
+      para eliminar los contenedores.
+
+    + Para ver solo los IDs de los contenedores e imagenes puedes usar esta bandera:
+
+        -q \t Muestra solamente los IDs
+    
+    + Puedes utilizar la siguiente bandera con el comando rm.
+
+        -f \t Forza la eliminación de contenedores en ejecución
+
+    """
 
     return ayuda
     
@@ -21,7 +33,7 @@ def ayudaEjercicio():
 def respuestaEjercicio():
 
     respuesta = """
-    Una forma de resolver el ejercicio es con el siguiente comando:
+    + Una forma de resolver el ejercicio es con el siguiente comando:
 
         docker rm -f $(docker ps -aq) && docker rmi $(docker images -q)
 
@@ -57,10 +69,9 @@ def vistaEjercicio(usuario):
     
         ELIMINAR la imagen de ubuntu y TODOS los contenedores con UN sólo comando.
     
-    Una vez que aparezca el prompt, solo podrás introducir una línea, por lo
-    que introduce tu respuesta y da enter cuando estés seguro de que está
-    correcta. Cuando introduzcas tu respuesta, al dar enter se comenzará con
-    la evalucación del ejercicio.
+    IMPORTANTE: Una vez que aparezca el prompt, solo podrás introducir una línea, 
+    por lo que introduce tu respuesta y da enter cuando estés seguro de que está
+    correcta. Al dar enter se comenzará con la evaluación del ejercicio.
     """
 
     print(sentencia)

@@ -49,7 +49,6 @@ def evaluarEjercicio():
 
     #SE EVALUA QUE SE HAYA COLOCADO CORRECTAMENTE EL NOMBRE DEL CONTENEDOR
     if output.stdout == '[]\n':
-        print(output.stdout)
         return False
 
     else:
@@ -79,6 +78,7 @@ def evaluarEjercicio():
             h == 'iot' and r == 'unless-stopped' and t == 'TZ=America/Mexico_City':
             validaCaracteristicas = True
 
+    #SE MANDA A LIMPIAR EL ESCENARIO
     limpiarEscenario()
         
     if validaCaracteristicas == True and validaImagen == True:
@@ -90,18 +90,20 @@ def evaluarEjercicio():
 def ayudaEjercicio():
 
     ayuda = """
-    Recuerda que para cambiar la zona horaria del contenedor debes enviar la 
-    siguiente variable de entorno.
+    + Recuerda que para cambiar la zona horaria del contenedor debes enviar la 
+      siguiente variable de entorno.
 
-    \tTZ
+        TZ
 
-    Toma en cuenta las siguientes banderas de Docker:
+    + Toma en cuenta las siguientes banderas de Docker:
 
-    -d \t Modo detach
-    -p \t Mapeo de puertos
-    -h \t Hostname
-    --restart  Politica de reinicio
+        -d \t Modo detach
+        -p \t Mapeo de puertos
+        -h \t Hostname
+        --restart  Política de reinicio
     
+    + Al nombrar el contenedor, toma en cuenta mayúsculas y minúsculas.
+
     """
 
     return ayuda
@@ -110,9 +112,9 @@ def ayudaEjercicio():
 def respuestaEjercicio():
 
     respuesta = """
-    El siguiente comando da solución al ejercicio: 
+    + El siguiente comando da solución al ejercicio:
 
-    docker run -dit --name MiTimeZone -h iot -p 80:80 --restart=unless-stopped -e TZ="America/Mexico_City" debian
+        docker run -dit --name MiTimeZone -h iot -p 80:80 --restart=unless-stopped -e TZ="America/Mexico_City" debian
     """
 
     return respuesta
@@ -124,11 +126,11 @@ def vistaEjercicio(usuario):
     logo = logoUAM.printLogo()
     print(logo)
     sentencia = """
-    Levanta un contenedor de Debian llamado "MiTimeZone" en modo DETACH y con la
-    terminal interactiva, con zona horaria de la Ciudad de México (America/Mexico_City)
-    y con una política de reinicio hasta que alguien lo detenga. Mapear el
-    puerto 80 del host al puerto 80 del contenedor. El hostname del contenedor
-    debe ser "iot".
+    Levanta un contenedor usando una imagen de Debian llamado "MiTimeZone" en
+    modo DETACH y con la terminal interactiva, con zona horaria de la Ciudad 
+    de México (America/Mexico_City) y con una política de reinicio hasta que 
+    alguien lo detenga. Mapea el puerto 80 del host al puerto 80 del contenedor. 
+    El hostname del contenedor debe ser "iot".
 
     Escribe 'exit' cuando hayas finalizado o en cualquier otro momento para 
     regresar a la aplicación principal.
@@ -146,10 +148,11 @@ def vistaEjercicio(usuario):
 
     #UNA VEZ QUE EL USUARIO ENTRA EXIT EN LA TERMINAL, SE EVALUA EL EJERCICIO
     print('\nEvaluando ejercicio...')
-    sleep(1)
+
     resultado = evaluarEjercicio()
 
+    #SE DECLARA LA LISTA CON EL USUARIO Y EL RESULTADO
     resultadoEjercicio = [usuario, resultado]
-    #sleep(2)
+    sleep(2)
 
     return resultadoEjercicio

@@ -20,6 +20,8 @@ def printLogo():
     #  ALUMNA: JOCELYN MENDOZA GONZÁLEZ                                      #
     #  PROFESOR: HUGO PABLO LEYVA                                            #
     #                                                                        #
+    #  SISTEMA OPERATIVO: CentOS 8                                           #
+    #                                                                        #
     ##########################################################################
     """
     

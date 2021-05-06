@@ -59,7 +59,6 @@ def evaluarEjercicio():
 
     #SE EVALUA QUE SE HAYA COLOCADO CORRECTAMENTE EL NOMBRE DEL CONTENEDOR
     if output.stdout == '[]\n':
-        print(output.stdout)
         return False
 
     else:
@@ -110,20 +109,22 @@ def evaluarEjercicio():
 def ayudaEjercicio():
 
     ayuda = """
-    Para agregar un contendor a una red, primero debes crearla con el siguiente
-    comando:
+    + Recuerda que para agregar un contendor a una red, primero debes crearla 
+      con el siguiente comando:
 
-    \tdocker network create
+        docker network create
 
-    Recuerda incluir el ID de la red y la máscara con '/' ejemplo:
+    + No olvides incluir el ID de la red y la máscara con '/'. Ejemplo:
 
-    \t192.168.0.0/24
+        192.168.0.0/24
 
-    También recuerda los siguientes comandos de Docker:
+    + También recuerda las siguientes banderas de Docker:
 
-    -d \t Modo detach
-    -p \t Mapeo de puertos
+        -d \t Modo detach
+        -p \t Mapeo de puertos
     
+    + Al nombrar el contenedor y la red, toma en cuenta mayúsculas y minúsculas.
+
     """
 
     return ayuda
@@ -132,10 +133,10 @@ def ayudaEjercicio():
 def respuestaEjercicio():
 
     respuesta = """
-    La siguiente secuencia de comandos da solución al ejercicio: 
+    + La siguiente secuencia de comandos da solución al ejercicio: 
 
-    docker network create --subnet 10.172.14.0/29 --gateway 10.172.14.6 miRed
-    docker run -dit -p 443:443 --network=miRed --ip 10.172.14.1 --name=MiNetwork ubuntu
+        docker network create --subnet 10.172.14.0/29 --gateway 10.172.14.6 miRed
+        docker run -dit -p 443:443 --network=miRed --ip 10.172.14.1 --name=MiNetwork ubuntu
     """
 
     return respuesta
@@ -147,10 +148,11 @@ def vistaEjercicio(usuario):
     logo = logoUAM.printLogo()
     print(logo)
     sentencia = """
-    Levanta un contenedor de Ubuntu llamado "MiNetwork" en modo DETACH y con la
-    terminal interactiva, con una IP 10.172.14.1 del segmento 10.172.14.0/29 
-    de una red que se llame "miRed", el gateway de la red debe ser la IP
-    10.172.14.6. Mapear el puerto 443 del host al puerto 443 del contenedor.
+    Levanta un contenedor usando una imagen de Ubuntu llamado "MiNetwork" en 
+    modo DETACH y con la terminal interactiva, con una IP 10.172.14.1 del 
+    segmento 10.172.14.0/29 de una red que se llame "miRed", el gateway de
+    la red debe ser la IP 10.172.14.6. Mapear el puerto 443 del host al puerto 
+    443 del contenedor.
 
     Escribe 'exit' cuando hayas finalizado o en cualquier otro momento para 
     regresar a la aplicación principal.
@@ -168,7 +170,7 @@ def vistaEjercicio(usuario):
 
     #UNA VEZ QUE EL USUARIO ENTRA EXIT EN LA TERMINAL, SE EVALUA EL EJERCICIO
     print('\nEvaluando ejercicio...')
-    sleep(1)
+
     resultado = evaluarEjercicio()
 
     resultadoEjercicio = [usuario, resultado]

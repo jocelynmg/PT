@@ -83,10 +83,12 @@ def evaluarEjercicio():
 def ayudaEjercicio():
 
     ayuda = """
-    Recuerda que en Docker puedes utilizar estas banderas.
+    + Recuerda que en Docker puedes utilizar estas banderas:
 
-    -p \t Mapeo de puertos
-    -d \t Modo detach
+        -p \t Mapeo de puertos
+        -d \t Modo detach
+
+    + Al nombrar el contenedor, toma en cuenta mayúsculas y minúsculas.
 
     """
 
@@ -96,9 +98,9 @@ def ayudaEjercicio():
 def respuestaEjercicio():
 
     respuesta = """
-    El ejercicio se puede resolver con el siguiente comando:
+    + El ejercicio se puede resolver con el siguiente comando:
 
-    docker run -dit --name=MiDocker -p 80:5000 ubuntu
+        docker run -dit --name=MiDocker -p 80:5000 ubuntu
     
     """
 
@@ -111,9 +113,9 @@ def vistaEjercicio(usuario):
     logo = logoUAM.printLogo()
     print(logo)
     sentencia = """
-    Levanta un contenedor de Ubuntu llamado "MiDocker" en modo DETACH y con la
-    terminal interactiva, así mismo, debes mapear el puerto 80 del Host hacia
-    el puerto 5000 del contenedor.
+    Levanta un contenedor usando la imagen de Ubuntu llamado "MiDocker" en modo
+    DETACH y con la terminal interactiva, así mismo, debes mapear el puerto 80
+    del Host hacia el puerto 5000 del contenedor.
 
     Escribe 'exit' cuando hayas finalizado o en cualquier otro momento para 
     regresar a la aplicación principal.

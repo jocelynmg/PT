@@ -1,5 +1,7 @@
-import subprocess as sp
 import json
+import sys, logoUAM
+import subprocess as sp
+from time import sleep
 
 def prepararEjercicio():
 
@@ -14,11 +16,25 @@ def prepararEjercicio():
                                             capture_output=False)
     
     #SE EJECUTA EL DOCKERFILE
-    sp.run('docker', 'build', '-f', '/home/pete/Escritorio/ProyectoTerminal/PT/util/dockerfile', '.',\
+    sp.run(['docker', 'build', '-f', '/home/pete/Escritorio/ProyectoTerminal/PT/util/dockerfile', '.'],\
                                             capture_output=True)
 
-    sp.run('docker', 'rmi', 'base', capture_output=True)
+    sp.run(['docker', 'rmi', 'base'], capture_output=True)
     
+    return True
+
+
+def limpiarEscenario():
+
+    #SE ELIMINAN TODOS LOS CONTENEDORES
+    sp.run('docker rm -f $(docker ps -aq)', capture_output=True, shell=True)
+
+    #SE ELIMINAN TODAS LAS IMAGENES
+    sp.run('docker rmi -f $(docker images -q)', capture_output=True, shell=True)
+
+    #SE BORRAN TODAS LAS REDES PERSONALIZADAS
+    sp.run('docker network rm $(docker network ls -q)', capture_output=True, shell=True)
+
     return True
 
 
@@ -70,9 +86,65 @@ def evaluarEjercicio():
         resultado = True
 
     return resultado
-        
 
-#prepararEjercicio()
-resultado = evaluarEjercicio()
-print(resultado)
 
+def ayudaEjercicio():
+
+    ayuda = """
+    + Revisa las imagenes, puedes renombrar las que están cargadas en Docker con
+      el siguiente comando.
+    
+        tag \t Para renombrar una imagen
+    
+    + Al nombrar el contenedor y la red, toma en cuenta mayúsculas y minúsculas.
+
+    """
+
+    return ayuda
+
+
+def respuestaEjercicio():
+
+    respuesta = """
+    + La siguiente secuencia de comandos da solución al ejercicio: 
+
+        docker tag [ID de la imagen <none>] myturtle
+        docker run --name=MiTortuga myturtle
+    """
+
+    return respuesta
+
+
+def vistaEjercicio(usuario):
+    sp.run('clear')
+
+    logo = logoUAM.printLogo()
+    print(logo)
+    sentencia = """
+    Uamito tienen problemas para levantar su contenedor. El contenedor debe 
+    utilizar la imagen myturtle y debe llamarse "MiTortuga", SIN utilizar
+    el modo DETACH. Ayuda a Uamito a levantar su contendor.
+
+    Escribe 'exit' cuando hayas finalizado o en cualquier otro momento para 
+    regresar a la aplicación principal.
+    """
+    print(sentencia)
+
+    input('Da enter para cargar tu escenario...')
+
+    #SE LLAMA A LA FUNCIÓN PARA PREPARAR EL EJERCICIO
+    prepararEjercicio()
+    
+    #ENTRANDO A KORN SHELL
+    print('\nAhora estás en KornShell')
+    sp.call('ksh')
+
+    #UNA VEZ QUE EL USUARIO ENTRA EXIT EN LA TERMINAL, SE EVALUA EL EJERCICIO
+    print('\nEvaluando ejercicio...')
+
+    resultado = evaluarEjercicio()
+
+    resultadoEjercicio = [usuario, resultado]
+    sleep(2)
+
+    return resultadoEjercicio

@@ -8,6 +8,7 @@ import ejercicios.stopCommand
 import ejercicios.miDocker
 import ejercicios.miNetwork
 import ejercicios.miTimeZone
+import ejercicios.renombrarImagen
 
 
 def inicio():
@@ -32,7 +33,7 @@ def inicio():
 
 
 def seleccionTipoEjercicio(usuario):
-    """Muestra pantalla donde el usuario elige el tipo de ejercicos que quiere
+    """Muestra pantalla donde el usuario elige el tipo de ejercicios que quiere
     resolver, así como el avance"""
     
     validacion = True
@@ -111,9 +112,20 @@ def seleccionEjercicio(usuario, tipo):
         print(f"\t{ejercicio[0]}. {ejercicio[1].descripcion}".ljust(40), end=" ")
         
         try:
-            print(f"Intentos: {listAvance.intento}\tResuelto: {listAvance.resuelto}".rjust(40))
+            resuelto = listAvance.resuelto
+            intentos = listAvance.intento
+            #print(f"Intentos: {listAvance.intento}\tResuelto: {listAvance.resuelto}".rjust(20))
         except:
-            print("Intentos: 0\tResuelto: No".rjust(20))
+            resuelto = 'No'
+            intentos = '0'
+
+            #print("Intentos: 0\tResuelto: No".rjust(20))
+        if resuelto == True:
+            resuelto = 'Sí'
+        elif resuelto == False:
+            resuelto = 'No'
+        
+        print(f"Intentos: {intentos}\tResuelto: {resuelto}".rjust(20))
     
     print(f"\t{len(listaEjercicios)+1}. Regresar al menú principal")
 
@@ -142,17 +154,14 @@ def llamarEjercicio(ejercicio, usuario):
     resultado = eval(f"ejercicios.{nombreEjercicio}.vistaEjercicio(usuario)")
 
     #SE ACTUALIZAN LAS ESTADÍSTICAS PARA EL USUARIO
-    actualizacion = avance.actualizarAvance(ejercicio, usuario, resultado[1])
-
-    if actualizacion >= 1:
-        print('\nAvance actualizado')
+    avance.actualizarAvance(ejercicio, usuario, resultado[1])
 
     #SI EL RESULTADO ESTÁ MAL SE MANDA A LLAMAR EL MODULO DE AYUDA
     if resultado[1] == False:
         mostrarAyuda(ejercicio, usuario)
     else:
         print(f'\n Tu resultado es CORRECTO, ¡Bien hecho! \n'.center(30, "="))
-        input("Da enter para continuar")
+        input("Da enter para continuar...")
 
 
     return resultado
@@ -169,14 +178,13 @@ def mostrarAyuda(ejercicio, usuario):
         subprocess.call('clear')
         print(logo)            
         print(f'¡Tu resultado es INCORRECTO!\n')
-        print("¿Necesitas ayuda? A continuación puedes elegir entre las "
-            + "siguientes opciones:")
-        print("""
-            1. Mostrar ayuda.
-            2. Ver respuesta.
-            3. Intentar de nuevo.
-            4. Regresar al menú principal.
-            """)
+        print("""¿Necesitas ayuda? A continuación puedes elegir entre las siguientes opciones:
+    
+        1. Mostrar ayuda.
+        2. Ver respuesta.
+        3. Intentar de nuevo.
+        4. Regresar al menú principal.
+        """)
 
         opcion = input("Tu opción: ")
 
@@ -189,11 +197,11 @@ def mostrarAyuda(ejercicio, usuario):
                 print(logo)            
                 print("Aquí tienes una pequeña ayuda:\n")
                 print(eval(f"ejercicios.{nombreEjercicio}.ayudaEjercicio()"))
-                reintento = input("\n¿Quieres intentar de nuevo? [si/no]: ")
+                reintento = input("\n¿Quieres intentar de nuevo? [s/n]: ")
                 
-                if reintento == 'si':
+                if reintento == 's':
                     llamarEjercicio(ejercicio, usuario)
-                elif reintento == 'no':
+                elif reintento == 'n':
                     continue
                 
                 return True
@@ -203,11 +211,11 @@ def mostrarAyuda(ejercicio, usuario):
                 subprocess.call('clear')
                 print(logo)
                 print(eval(f"ejercicios.{nombreEjercicio}.respuestaEjercicio()"))
-                reintento = input("\n¿Quieres intentar de nuevo? [si/no]: ")
+                reintento = input("\n¿Quieres intentar de nuevo? [s/n]: ")
                 
-                if reintento == 'si':
+                if reintento == 's':
                     llamarEjercicio(ejercicio, usuario)
-                elif reintento == 'no':
+                elif reintento == 'n':
                     continue
 
                 return True

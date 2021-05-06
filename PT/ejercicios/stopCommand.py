@@ -14,10 +14,25 @@ def prepararEjercicio():
     return True
 
 
+def ayudaEjercicio():
+    #SE PROPORCIONA AYUDA AL USUARIO
+    ayuda = """
+    + Intenta hacer uso de dos comandos, asigna la salida de los IDs al comando
+      para detener los dockers.
+
+    + Para ver solo los IDs de los contenedores puedes usar esta bandera:
+
+        -q \t Muestra solamente los IDs
+    
+    """
+
+    return ayuda
+
+
 def respuestaEjercicio():
     #SE DA LA RESPUESTA DEL EJERCICIO AL USUARIO
     respuesta = """
-    Una forma de resolver el ejercicio es con el siguiente comando:
+    + Una forma de resolver el ejercicio es con el siguiente comando:
         
         docker stop $(docker ps -aq)
 
@@ -54,10 +69,9 @@ def vistaEjercicio(usuario):
     
         DETENER TODOS los contenedores con UN sólo comando. 
     
-    Una vez que aparezca el prompt, solo podrás introducir una línea, por lo
-    que introduce tu respuesta y da enter cuando estés seguro de que ya está
-    correcta. Cuando introduzcas tu respuesta, al dar enter se comenzará con
-    la evalucación del ejercicio.
+    IMPORTANTE: Una vez que aparezca el prompt, solo podrás introducir una línea, 
+    por lo que introduce tu respuesta y da enter cuando estés seguro de que ya 
+    está correcta. Al dar enter se comenzará con la evalucación del ejercicio.
     """
     print(sentencia)
 
@@ -66,7 +80,7 @@ def vistaEjercicio(usuario):
     print('\n\nPreparando tu escenario, espera a que aparezca el prompt...')
 
     #SE CARGAN LOS CONTENEDORES PARA ELEJERCICIO
-    for i in range(8):
+    for i in range(7):
         sp.run(['docker','run','-dit','ubuntu'], capture_output=True)
     
     #SE MUESTRAN los contenedores activos
