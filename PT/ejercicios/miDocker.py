@@ -4,6 +4,7 @@ import subprocess as sp
 from time import sleep
 
 def prepararEjercicio():
+    """Este método prepara el escenario para el ejercicio"""
 
     #SE ELIMINAN TODOS LOS CONTENEDORES
     sp.run('docker rm -f $(docker ps -aq)', capture_output=True, shell=True)
@@ -12,13 +13,14 @@ def prepararEjercicio():
     sp.run('docker rmi -f $(docker images -q)', capture_output=True, shell=True)
 
     #SE CARGA LA IMAGEN QUE SE VA A UTILIZAR
-    sp.run(['docker','load','-i','/home/pete/Escritorio/ProyectoTerminal/PT/util/images/ubuntu.tar'],\
+    sp.run(['docker','load','-i','util/images/ubuntu.tar'],\
                                     capture_output=False)
     
     return True
 
 
 def limpiarEscenario():
+    """Limpia el ejercicio después de que haya acabado el usuario"""
 
     #SE ELIMINAN TODOS LOS CONTENEDORES
     sp.run('docker rm -f $(docker ps -aq)', capture_output=True, shell=True)
@@ -30,6 +32,9 @@ def limpiarEscenario():
 
 
 def evaluarEjercicio():
+    """En este módulo se evalua que se cumplan con los requirimientos solicitados
+    para determinar si el ejercicio está bien"""
+
     resultado = False
     validaImagen = False
     validaCaracteristicas = False
@@ -122,7 +127,8 @@ def vistaEjercicio(usuario):
     """
     print(sentencia)
 
-    input('Da enter para cargar tu escenario...\n')
+    input('Da enter para cargar tu escenario...')
+    print('\n')
 
     #SE LLAMA A LA FUNCIÓN PARA PREPARAR EL EJERCICIO
     prepararEjercicio()

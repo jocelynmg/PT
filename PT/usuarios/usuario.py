@@ -44,10 +44,6 @@ class Usuario(BaseModel):
 
         #SE MANDA EL QUERY Y REGRESA LA TUPLA DEL USUARIO SI EXISTE
         try:
-            #resultado = (Usuario
-            #            .get((Usuario.username == self.username) &
-            #            (Usuario.password == cifrado.hexdigest())))
-
             resultado = (Usuario
                         .select(Usuario)
                         .where(

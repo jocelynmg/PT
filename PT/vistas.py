@@ -1,4 +1,4 @@
-import subprocess, logoUAM
+import subprocess, logoUAM, color
 from ejercicios.ejercicio import Ejercicio
 from ejercicios.avance.avance_usuario import Avance_Usuario
 import ejercicios.levantarDocker
@@ -13,13 +13,15 @@ import ejercicios.renombrarImagen
 
 def inicio():
     """Muestra pantalla de bienvenida a los usuarios para iniciar sesión
-        o registrase en la aplicación
-        """
+    o registrase en la aplicación"""
+    
+    #SE INSTANCIA UN OBJETO COLOR PARA DAR FORMATO AL TEXTO
+    c = color.Color()
     #LIMPIA TERMINAL Y MUESTRA CABECERA
     subprocess.call('clear')
     logo = logoUAM.printLogo()
     print(logo)
-    print(' ¡Hola, bienvenid@!')
+    print(c.BOLD + ' ¡Hola, bienvenid@!' + c.END)
     print(' Elige la opción que deseas para ingresar a la aplicación:')
     print("""
         1. Iniciar sesión
@@ -36,6 +38,8 @@ def seleccionTipoEjercicio(usuario):
     """Muestra pantalla donde el usuario elige el tipo de ejercicios que quiere
     resolver, así como el avance"""
     
+    #SE INSTANCIA UN OBJETO COLOR PARA DAR FORMATO AL TEXTO
+    c = color.Color()
     validacion = True
 
     while validacion:
@@ -44,7 +48,7 @@ def seleccionTipoEjercicio(usuario):
         logo = logoUAM.printLogo()
         print(logo)
         #SE LISTAN LOS TIPOS DE EJERCICIOS DISPONIBLES
-        print(f'¡Hola {usuario.username.upper()}!,')
+        print(c.BOLD + f'¡Hola {usuario.username.upper()}!' + c.END + ',')
         print('A continuación puedes elegir el tipo de ejercicio a realizar')
         print("""
             1. Prácticar comandos de Docker
@@ -91,6 +95,7 @@ def seleccionTipoEjercicio(usuario):
 
 
 def seleccionEjercicio(usuario, tipo):
+    """Muestra los ejercicios disponibles dependiendo el tipo de ejercicio"""
 
     logo = logoUAM.printLogo()
     print(logo)
@@ -103,7 +108,7 @@ def seleccionEjercicio(usuario, tipo):
     listaEjercicios = listaEjercicios.recuperarEjercicios(tipo)
 
     print(f'De acuerdo {usuario.username.upper()}, vamos a realizar'
-        + ' algunos retos de comandos para Docker.')
+        + ' algunos ejercicios en el servidor Docker.')
     print('\nElige de la siguiente lista cuál quieres hacer:\n')
 
     #MUESTRA LA LISTA DE EJERCICIOS
@@ -144,6 +149,10 @@ def seleccionEjercicio(usuario, tipo):
 
 
 def llamarEjercicio(ejercicio, usuario):
+    """Este módulo se dedica a llamar al script del ejercicio seleccionado"""
+
+    #SE INSTANCIA UN OBJETO COLOR PARA DAR FORMATO AL TEXTO
+    c = color.Color()
 
     #SE INSTANCIA UN OBJETO AVANCE_USUARIO PARA GUARDAR EL AVANCE
     avance = Avance_Usuario()
@@ -160,7 +169,7 @@ def llamarEjercicio(ejercicio, usuario):
     if resultado[1] == False:
         mostrarAyuda(ejercicio, usuario)
     else:
-        print(f'\n Tu resultado es CORRECTO, ¡Bien hecho! \n'.center(30, "="))
+        print(c.BOLD + f'\n\n\t¡Bien hecho, tu resultado es '+ c.GREEN +'CORRECTO' + c.END +'! \n\n')
         input("Da enter para continuar...")
 
 
@@ -168,16 +177,23 @@ def llamarEjercicio(ejercicio, usuario):
 
 
 def mostrarAyuda(ejercicio, usuario):
+    """Muestra las opciones de ayuda y resultado cuando el resultado es 
+    incorrecto"""
+
+    #SE INSTANCIA UN OBJETO COLOR PARA DAR FORMATO AL TEXTO
+    c = color.Color()
     
     validacion = True
     logo = logoUAM.printLogo()
+
+    #SE OBTIENE EL NOMBRE DEL EJERCICIO
     nombreEjercicio = ejercicio.nombre
 
     while validacion:
-
+        #SE MUESTRAN LAS OPCIONES CUANDO EL EJERCICIO ES INCORRECTO
         subprocess.call('clear')
         print(logo)            
-        print(f'¡Tu resultado es INCORRECTO!\n')
+        print(c.BOLD +'¡Tu resultado es ' + c.YELLOW + 'INCORRECTO' + c.END + '!\n')
         print("""¿Necesitas ayuda? A continuación puedes elegir entre las siguientes opciones:
     
         1. Mostrar ayuda.
@@ -191,12 +207,14 @@ def mostrarAyuda(ejercicio, usuario):
         try:
             subprocess.call('clear')
 
+            #SE MUESTRA LA AYUDA PARA EL EJERCICIO
             if opcion == '1':
                 validacion = False
                 subprocess.call('clear')
                 print(logo)            
                 print("Aquí tienes una pequeña ayuda:\n")
                 print(eval(f"ejercicios.{nombreEjercicio}.ayudaEjercicio()"))
+                #SE PREGUNTA SI SE QUIERE INTENTAR NUEVAMENTE
                 reintento = input("\n¿Quieres intentar de nuevo? [s/n]: ")
                 
                 if reintento == 's':
@@ -206,11 +224,13 @@ def mostrarAyuda(ejercicio, usuario):
                 
                 return True
 
+            #SE MUESTRA EL RESULTADO DEL EJERCICIO
             elif opcion == '2':
                 validacion = False
                 subprocess.call('clear')
                 print(logo)
                 print(eval(f"ejercicios.{nombreEjercicio}.respuestaEjercicio()"))
+                #SE PREGUNTA SI SE QUIERE INTENTAR NUEVAMENTE EL EJERCICIO
                 reintento = input("\n¿Quieres intentar de nuevo? [s/n]: ")
                 
                 if reintento == 's':
@@ -220,10 +240,12 @@ def mostrarAyuda(ejercicio, usuario):
 
                 return True
 
+            #SE LLAMA DE NUEVO EL EJERCICIO
             elif opcion == '3':
                 validacion = False
                 llamarEjercicio(ejercicio, usuario)
 
+            #REGRESA AL MENÚ PRINCIPAL
             elif opcion == '4':
                 validacion = False
 

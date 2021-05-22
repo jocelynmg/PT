@@ -7,8 +7,6 @@ Este es el módulo principal del Proyecto de Integración para mejorar hábilida
 en el uso de contenedores con tecnología de Docker.
 """
 
-#def elegirOpcionInicio():
-
 if __name__ == "__main__":
 
     validacion = True

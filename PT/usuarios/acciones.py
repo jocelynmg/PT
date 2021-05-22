@@ -1,4 +1,4 @@
-import logoUAM
+import logoUAM, color
 import subprocess
 import usuarios.usuario as user
 from getpass import getpass
@@ -8,6 +8,9 @@ class Acciones:
 
     def registrarse(self):
         """Método para registro de nuevos usuarios en la aplicación"""
+
+        #SE INSTANCIA UN OBJETO COLOR PARA DAR FORMATO AL TEXTO
+        c = color.Color()
         
         #VALIDA QUE EL USUARIO NO EXISTA YA EN LA BASE DE DATOS
         validacion = True
@@ -20,7 +23,7 @@ class Acciones:
             subprocess.call('clear')
             logo = logoUAM.printLogo()
             print(logo)
-            print(' REGISTRO.')
+            print(c.BOLD + ' REGISTRO.' + c.END)
             #PIDE LOS DATOS DE NUEVO USUARIO
             if intento == 0 :
                 print(' A continuación se te solicitará Username y Password' 
@@ -52,6 +55,9 @@ class Acciones:
     def iniciarSesion(self):
         """Método para el inicio de sesión de los usuarios"""
 
+        #SE INSTANCIA UN OBJETO COLOR PARA DAR FORMATO AL TEXTO
+        c = color.Color()
+
         #VALIDA EL INGRESO DE DATOS CORRECTOS POR EL USUARIO
         validacion = True
         #SE INCREMENTA CUANDO EL USUARIO INGRASA UN DATO ERRÓNEO
@@ -62,7 +68,7 @@ class Acciones:
             subprocess.call('clear')
             logo = logoUAM.printLogo()
             print(logo)
-            print(' INICIO DE SESIÓN.')
+            print(c.BOLD + ' INICIO DE SESIÓN.' + c.END)
             #PIDEO LOS DATOS DE INICIO DE SESIÓN
             if intento == 0:
                 print(' Ingresa tu usuario y password para accesar:\n')

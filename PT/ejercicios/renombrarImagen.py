@@ -12,13 +12,14 @@ def prepararEjercicio():
     sp.run('docker rmi -f $(docker images -q)', capture_output=True, shell=True)
 
     #SE CARGA LA IMAGEN QUE SE VA A UTILIZAR
-    sp.run(['docker','load','-i','/home/pete/Escritorio/ProyectoTerminal/PT/util/images/base.tar'],\
+    sp.run(['docker','load','-i','util/images/base.tar'],\
                                             capture_output=False)
     
     #SE EJECUTA EL DOCKERFILE
-    sp.run(['docker', 'build', '-f', '/home/pete/Escritorio/ProyectoTerminal/PT/util/dockerfile', '.'],\
+    sp.run(['docker', 'build', '-f', 'util/dockerfile', '.'],\
                                             capture_output=True)
 
+    #SE ELIMINA LA IMAGEN BASE QUE SE CREÓ
     sp.run(['docker', 'rmi', 'base'], capture_output=True)
     
     return True
@@ -131,6 +132,7 @@ def vistaEjercicio(usuario):
     print(sentencia)
 
     input('Da enter para cargar tu escenario...')
+    print('\n')
 
     #SE LLAMA A LA FUNCIÓN PARA PREPARAR EL EJERCICIO
     prepararEjercicio()

@@ -3,27 +3,17 @@ import subprocess
 from time import sleep
 
 def prepararEjercicio():
-    #SE RECUPERAN LOS IDS DE LOS DOCKER EN ESTADO EXITED
-    proceso = subprocess.Popen(
-        'docker ps -aq'.split(), 
-        stdout = subprocess.PIPE,
-        stderr = subprocess.DEVNULL
-        )
+    """Este método prepara el escenario para el ejercicio"""
 
-    proceso.wait()
-    ids = proceso.stdout.read()
-    proceso.stdout.close()
-    ids = ids.decode(sys.getdefaultencoding()).split()
+    #SE ELIMINAN TODOS LOS CONTENEDORES
+    subprocess.run('docker rm -f $(docker ps -aq)', capture_output=True, shell=True)
 
-    #SE LIMPIAN LOS CONTENEDORES QUE SE HAYAN PREVIAMENTE EJECUTADO
-    for id in ids:
-        rm = subprocess.Popen(
-            f'docker rm -f {id}'.split(),
-            stdout = subprocess.DEVNULL,
-            stderr = subprocess.DEVNULL
-            )
-        rm.wait()
-        #rm.stdout.close()
+    #SE ELIMINAN TODAS LAS IMAGENES
+    subprocess.run('docker rmi -f $(docker images -q)', capture_output=True, shell=True)
+
+    #SE CARGA LA IMAGEN QUE SE VA A UTILIZAR
+    subprocess.run(['docker','load','-i','util/images/python.tar'],\
+                                    capture_output=False)
     
     #SE APAGA EL SERVICIO DE DOCKER
     subprocess.run(
@@ -31,6 +21,10 @@ def prepararEjercicio():
         stdout = subprocess.DEVNULL,
         stderr = subprocess.DEVNULL
         )
+
+
+    return True
+
 
 def limpiarEscenario():
 
@@ -67,7 +61,7 @@ def evaluarEjercicio():
     #EVALUA QUE SE TENGAN LOS PARÁMETROS SOLICITADOS EN EL DOCKER
     for line in salida:
 
-        if 'python' in line and '\"sleep 5\"' in line and 'PythonTest' in line:
+        if 'python:3.6-slim-stretch' in line and '\"sleep 5\"' in line and 'PythonTest' in line:
             resultado = True
 
 
@@ -99,7 +93,7 @@ def respuestaEjercicio():
 
         systemctl status docker.service        --> Valida el estado de Docker
         sudo systemctl start docker.service    --> Levanta el servicio Docker
-        docker run -d --name=PythonTest python sleep 5
+        docker run -d --name=PythonTest python:3.6-slim-stretch sleep 5
     
     """
 
@@ -113,8 +107,9 @@ def vistaEjercicio(usuario):
     print(logo)
     sentencia = """
     Uamito tiene que levantar un contenedor usando la imagen de python con el
-    nombre "PythonTest" en modo DETACH y que ejecute el comando "sleep 5", pero
-    tiene problemas para lograrlo. Ayuda a Uamito a levantar su Docker.
+    tag 3.6-slim-stretch con el nombre "PythonTest" en modo DETACH y que ejecute
+    el comando "sleep 5", pero tiene problemas para lograrlo. Ayuda a Uamito a 
+    levantar su Docker.
 
     Una vez que el contenedor con las características mencionadas se haya 
     ejecutado, se dará como bueno el ejercicio.
@@ -125,6 +120,7 @@ def vistaEjercicio(usuario):
     print(sentencia)
 
     input('Da enter para comenzar...')
+    print('\n')
 
     #SE LLAMA A LA FUNCIÓN PARA PREPARAR EL EJERCICIO
     prepararEjercicio()

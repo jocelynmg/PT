@@ -15,7 +15,7 @@ def prepararEjercicio():
     sp.run('docker network rm $(docker network ls -q)', capture_output=True, shell=True)
     
     #SE CARGA LA IMAGEN QUE SE VA A UTILIZAR
-    sp.run(['docker','load','-i','/home/pete/Escritorio/ProyectoTerminal/PT/util/images/ubuntu.tar'],\
+    sp.run(['docker','load','-i','util/images/ubuntu.tar'],\
                                     capture_output=False)
     
     return True
@@ -36,6 +36,8 @@ def limpiarEscenario():
 
 
 def evaluarEjercicio():
+
+    #SE DECLARAN LAS VARIABLES A UTILIZAR
     resultado = False
     validaImagen = False
     validaCaracteristicas = False
@@ -159,7 +161,8 @@ def vistaEjercicio(usuario):
     """
     print(sentencia)
 
-    input('Da enter para cargar tu escenario...\n')
+    input('Da enter para cargar tu escenario...')
+    print('\n')
 
     #SE LLAMA A LA FUNCIÓN PARA PREPARAR EL EJERCICIO
     prepararEjercicio()

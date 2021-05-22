@@ -11,6 +11,22 @@ def prepararEjercicio():
     #SE ELIMINAN TODAS LAS IMAGENES
     sp.run('docker rmi -f $(docker images -q)', capture_output=True, shell=True)
 
+    #SE CARGA LA IMAGEN QUE SE VA A UTILIZAR
+    sp.run(['docker','load','-i','util/images/ubuntu.tar'],\
+                                                    capture_output=False)
+
+    return True
+
+
+def limpiarEscenario():
+    """Limpia el ejercicio después de que haya acabado el usuario"""
+
+    #SE ELIMINAN TODOS LOS CONTENEDORES
+    sp.run('docker rm -f $(docker ps -aq)', capture_output=True, shell=True)
+
+    #SE ELIMINAN TODAS LAS IMAGENES
+    sp.run('docker rmi -f $(docker images -q)', capture_output=True, shell=True)
+
     return True
 
 
@@ -46,7 +62,7 @@ def evaluarEjercicio():
 
     #SE EVALUA SI SE DETUVIERON TODOS LOS CONTENEDORES
     check = sp.run(['docker','ps','-q'], capture_output=True, encoding='utf-8')
-    prepararEjercicio()
+    limpiarEscenario()
 
     return False if len(check.stdout) > 0 else True
 
@@ -56,14 +72,9 @@ def vistaEjercicio(usuario):
 
     #SE LIMPIA LA PANTALLA
     sp.run('clear')
-    prepararEjercicio()
-
-    #SE CARGA LA IMAGEN QUE SE VA A UTILIZAR
-    sp.run(['docker','load','-i','/home/pete/Escritorio/ProyectoTerminal/PT/util/images/ubuntu.tar'],\
-                                                    capture_output=True)
-
     logo = logoUAM.printLogo()
     print(logo)
+
     sentencia = """
     A continuación, intenta realizar lo siguiente:
     
@@ -77,7 +88,11 @@ def vistaEjercicio(usuario):
 
     input('Da enter para comenzar...')
     #SE COMIENZA A PREPARAR EL EJERCICIO
-    print('\n\nPreparando tu escenario, espera a que aparezca el prompt...')
+    print('\nPreparando tu escenario, espera a que aparezca el prompt.\n')
+
+    prepararEjercicio()
+
+    print('\n')
 
     #SE CARGAN LOS CONTENEDORES PARA ELEJERCICIO
     for i in range(7):

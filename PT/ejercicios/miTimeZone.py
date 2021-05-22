@@ -12,7 +12,7 @@ def prepararEjercicio():
     sp.run('docker rmi -f $(docker images -q)', capture_output=True, shell=True)
     
     #SE CARGA LA IMAGEN QUE SE VA A UTILIZAR
-    sp.run(['docker','load','-i','/home/pete/Escritorio/ProyectoTerminal/debian.tar'],\
+    sp.run(['docker','load','-i','util/images/debian.tar'],\
                                     capture_output=False)
     
     return True
@@ -138,6 +138,7 @@ def vistaEjercicio(usuario):
     print(sentencia)
 
     input('Da enter para cargar tu escenario...')
+    print('\n')
 
     #SE LLAMA A LA FUNCIÓN PARA PREPARAR EL EJERCICIO
     prepararEjercicio()

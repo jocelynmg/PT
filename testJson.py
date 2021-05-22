@@ -14,10 +14,10 @@ def prepararEjercicio():
                                             capture_output=False)
     
     #SE EJECUTA EL DOCKERFILE
-    sp.run('docker', 'build', '-f', '/home/pete/Escritorio/ProyectoTerminal/PT/util/dockerfile', '.',\
+    sp.run(['docker', 'build', '-f', '/home/pete/Escritorio/ProyectoTerminal/PT/util/dockerfile', '.'],\
                                             capture_output=True)
 
-    sp.run('docker', 'rmi', 'base', capture_output=True)
+    sp.run(['docker', 'rmi', 'base'], capture_output=True)
     
     return True
 
