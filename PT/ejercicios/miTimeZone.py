@@ -1,5 +1,5 @@
 import json
-import sys, logoUAM
+import sys, logoUAM, color
 import subprocess as sp
 from time import sleep
 
@@ -121,6 +121,10 @@ def respuestaEjercicio():
 
 
 def vistaEjercicio(usuario):
+
+    #SE INSTANCIA UN OBJETO COLOR PARA DAR FORMATO AL TEXTO
+    c = color.Color()
+
     sp.run('clear')
 
     logo = logoUAM.printLogo()
@@ -137,18 +141,19 @@ def vistaEjercicio(usuario):
     """
     print(sentencia)
 
-    input('Da enter para cargar tu escenario...')
-    print('\n')
+    input(c.BOLD + 'Da enter para comenzar...' + c.END)
+    
+    print('\nPreparando tu escenario, espera a que aparezca el prompt.\n')
 
     #SE LLAMA A LA FUNCIÓN PARA PREPARAR EL EJERCICIO
     prepararEjercicio()
     
     #ENTRANDO A KORN SHELL
-    print('\nAhora estás en KornShell')
+    print(c.YELLOW + c.BOLD +'\nAhora estás en KornShell' + c.END)
     sp.call('ksh')
 
     #UNA VEZ QUE EL USUARIO ENTRA EXIT EN LA TERMINAL, SE EVALUA EL EJERCICIO
-    print('\nEvaluando ejercicio...')
+    print(c.CYAN + c.BOLD + '\nEvaluando el ejercicio...' + c.END)
 
     resultado = evaluarEjercicio()
 

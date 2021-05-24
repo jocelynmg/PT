@@ -22,13 +22,13 @@ def inicio():
     logo = logoUAM.printLogo()
     print(logo)
     print(c.BOLD + ' ¡Hola, bienvenid@!' + c.END)
-    print(' Elige la opción que deseas para ingresar a la aplicación:')
+    print(' Elige la opción que deseas para ingresar a la aplicación.')
     print("""
         1. Iniciar sesión
         2. Registrarse
         3. Salir
     """)
-    opcion = input(' Tu opción: ')
+    opcion = input(c.BOLD +' Tu opción: ' + c.END)
 
     #REGRESA LA OPCIÓN ELEGIDA POR EL USUARIO
     return opcion
@@ -49,7 +49,7 @@ def seleccionTipoEjercicio(usuario):
         print(logo)
         #SE LISTAN LOS TIPOS DE EJERCICIOS DISPONIBLES
         print(c.BOLD + f'¡Hola {usuario.username.upper()}!' + c.END + ',')
-        print('A continuación puedes elegir el tipo de ejercicio a realizar')
+        print('A continuación puedes elegir el tipo de ejercicio a realizar.')
         print("""
             1. Prácticar comandos de Docker
             2. Troubleshooting en Docker
@@ -57,7 +57,7 @@ def seleccionTipoEjercicio(usuario):
             4. Salir 
         """)
 
-        opcion = input('Tu opción: ')
+        opcion = input(c.BOLD+'Tu opción: '+c.END)
 
         try:
             subprocess.call('clear')
@@ -82,7 +82,7 @@ def seleccionTipoEjercicio(usuario):
 
             elif opcion == '4':
                 #SALE DE LA APLICACIÓN
-                print(f'¡Hasta luego, {usuario.username.upper()}!')
+                print(c.BOLD + c.YELLOW +f'\n¡Hasta luego, {usuario.username.upper()}!\n'+c.END)
                 break
             
             else:
@@ -90,12 +90,15 @@ def seleccionTipoEjercicio(usuario):
                 raise ValueError('OpcionInvalida')
 
         except ValueError:
-            print('\n¡Opción inválida! :(, intenta otra vez\n')
+            print('\n¡Opción inválida! :(, intenta otra vez.\n')
             continue
 
 
 def seleccionEjercicio(usuario, tipo):
     """Muestra los ejercicios disponibles dependiendo el tipo de ejercicio"""
+
+    #SE INSTANCIA UN OBJETO COLOR PARA DAR FORMATO AL TEXTO
+    c = color.Color()
 
     logo = logoUAM.printLogo()
     print(logo)
@@ -107,7 +110,7 @@ def seleccionEjercicio(usuario, tipo):
     #SE RECUPERA LA LISTA DE EJERCICIOS EN LA BD DE ACUERDO AL TIPO DE EJERCICIO
     listaEjercicios = listaEjercicios.recuperarEjercicios(tipo)
 
-    print(f'De acuerdo {usuario.username.upper()}, vamos a realizar'
+    print('De acuerdo '+ c.BOLD + f'{usuario.username.upper()}'+c.END+', vamos a realizar'
         + ' algunos ejercicios en el servidor Docker.')
     print('\nElige de la siguiente lista cuál quieres hacer:\n')
 
@@ -135,7 +138,7 @@ def seleccionEjercicio(usuario, tipo):
     print(f"\t{len(listaEjercicios)+1}. Regresar al menú principal")
 
     #SE ESPERA LA ELECCIÓN DEL USUARIO
-    opcion = int(input("\nTu opción: "))
+    opcion = int(input(c.BOLD+"\nTu opción: "+c.END))
     
     if opcion >= 1 and opcion <= len(listaEjercicios):
         #SE OBTIENE EL EJERCICIO Y EL NOMBRE
@@ -169,8 +172,8 @@ def llamarEjercicio(ejercicio, usuario):
     if resultado[1] == False:
         mostrarAyuda(ejercicio, usuario)
     else:
-        print(c.BOLD + f'\n\n\t¡Bien hecho, tu resultado es '+ c.GREEN +'CORRECTO' + c.END +'! \n\n')
-        input("Da enter para continuar...")
+        print(c.BOLD + f'\n\n\t¡Bien hecho, tu resultado es '+ c.GREEN +'CORRECTO' + c.END + c.BOLD +'! \n\n'+c.END)
+        input(c.BOLD+"Da enter para continuar..."+c.END)
 
 
     return resultado
@@ -193,16 +196,16 @@ def mostrarAyuda(ejercicio, usuario):
         #SE MUESTRAN LAS OPCIONES CUANDO EL EJERCICIO ES INCORRECTO
         subprocess.call('clear')
         print(logo)            
-        print(c.BOLD +'¡Tu resultado es ' + c.YELLOW + 'INCORRECTO' + c.END + '!\n')
-        print("""¿Necesitas ayuda? A continuación puedes elegir entre las siguientes opciones:
+        print(c.BOLD +'¡Tu resultado es ' + c.YELLOW + 'INCORRECTO' + c.END + c.BOLD +'!\n'+c.END)
+        print("""¿Necesitas ayuda? A continuación puedes elegir entre las siguientes opciones.
     
-        1. Mostrar ayuda.
-        2. Ver respuesta.
-        3. Intentar de nuevo.
-        4. Regresar al menú principal.
+        1. Mostrar ayuda
+        2. Ver respuesta
+        3. Intentar de nuevo
+        4. Regresar al menú principal
         """)
 
-        opcion = input("Tu opción: ")
+        opcion = input(c.BOLD+"Tu opción: "+c.END)
 
         try:
             subprocess.call('clear')
@@ -215,7 +218,7 @@ def mostrarAyuda(ejercicio, usuario):
                 print("Aquí tienes una pequeña ayuda:\n")
                 print(eval(f"ejercicios.{nombreEjercicio}.ayudaEjercicio()"))
                 #SE PREGUNTA SI SE QUIERE INTENTAR NUEVAMENTE
-                reintento = input("\n¿Quieres intentar de nuevo? [s/n]: ")
+                reintento = input(c.BOLD+"\n¿Quieres intentar de nuevo? [s/n]: "+c.END)
                 
                 if reintento == 's':
                     llamarEjercicio(ejercicio, usuario)
@@ -231,7 +234,7 @@ def mostrarAyuda(ejercicio, usuario):
                 print(logo)
                 print(eval(f"ejercicios.{nombreEjercicio}.respuestaEjercicio()"))
                 #SE PREGUNTA SI SE QUIERE INTENTAR NUEVAMENTE EL EJERCICIO
-                reintento = input("\n¿Quieres intentar de nuevo? [s/n]: ")
+                reintento = input(c.BOLD+"\n¿Quieres intentar de nuevo? [s/n]: "+c.END)
                 
                 if reintento == 's':
                     llamarEjercicio(ejercicio, usuario)
@@ -253,7 +256,7 @@ def mostrarAyuda(ejercicio, usuario):
                 raise ValueError('OpcionInvalida')
 
         except ValueError:
-            print('\n¡Opción inválida! :(, intenta otra vez\n')
+            print('\n¡Opción inválida! :(, intenta otra vez.\n')
             continue
     
 

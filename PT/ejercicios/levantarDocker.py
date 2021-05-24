@@ -1,4 +1,4 @@
-import sys, logoUAM
+import sys, logoUAM, color
 import subprocess
 from time import sleep
 
@@ -101,13 +101,17 @@ def respuestaEjercicio():
 
 
 def vistaEjercicio(usuario):
+
+    #SE INSTANCIA UN OBJETO COLOR PARA DAR FORMATO AL TEXTO
+    c = color.Color()
+
     subprocess.run('clear')
 
     logo = logoUAM.printLogo()
     print(logo)
     sentencia = """
     Uamito tiene que levantar un contenedor usando la imagen de python con el
-    tag 3.6-slim-stretch con el nombre "PythonTest" en modo DETACH y que ejecute
+    tag 3.6-slim-stretch, con el nombre "PythonTest", en modo DETACH y que ejecute
     el comando "sleep 5", pero tiene problemas para lograrlo. Ayuda a Uamito a 
     levantar su Docker.
 
@@ -119,18 +123,20 @@ def vistaEjercicio(usuario):
     """
     print(sentencia)
 
-    input('Da enter para comenzar...')
-    print('\n')
+    input(c.BOLD + 'Da enter para comenzar...' + c.END)
+    
+    #SE COMIENZA A PREPARAR EL EJERCICIO
+    print('\nPreparando tu escenario, espera a que aparezca el prompt.\n')
 
     #SE LLAMA A LA FUNCIÓN PARA PREPARAR EL EJERCICIO
     prepararEjercicio()
     
     #ENTRANDO A KORN SHELL
-    print('\nAhora estás en KornShell')
+    print(c.YELLOW + c.BOLD +'\nAhora estás en KornShell' + c.END)
     subprocess.call('ksh')
 
     #UNA VEZ QUE EL USUARIO ENTRA EXIT EN LA TERMINAL, SE EVALUA EL EJERCICIO
-    print('\nEvaluando ejercicio...')
+    print(c.CYAN + c.BOLD + '\nEvaluando el ejercicio...' + c.END)
     resultado = evaluarEjercicio()
 
     limpiarEscenario()

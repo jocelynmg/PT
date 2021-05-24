@@ -1,5 +1,5 @@
 import subprocess
-import vistas
+import vistas, color
 from usuarios import acciones
 
 """
@@ -9,6 +9,7 @@ en el uso de contenedores con tecnología de Docker.
 
 if __name__ == "__main__":
 
+    c = color.Color()
     validacion = True
 
     while validacion:
@@ -35,7 +36,7 @@ if __name__ == "__main__":
             elif opcion == '3':
                 #SALE DE LA APLICACIÓN
                 validacion = False
-                print('¡Hasta Luego!')
+                print(c.BOLD+c.YELLOW+'\n¡Hasta Luego!\n'+c.END)
 
             else:
                 raise ValueError('OpcionInvalida')

@@ -26,8 +26,8 @@ class Acciones:
             print(c.BOLD + ' REGISTRO.' + c.END)
             #PIDE LOS DATOS DE NUEVO USUARIO
             if intento == 0 :
-                print(' A continuación se te solicitará Username y Password' 
-                +' para completar tu registro:\n')
+                print(' A continuación se te solicitará Usuario y Password' 
+                +' para completar tu registro.\n')
             #MUESTRA QUE EL USUARIO YA ESTA EN LA BASE DE DATOS
             else:
                 print(' ¡El usuario ingresado ya existe!, intenta con otro.\n')
@@ -71,10 +71,10 @@ class Acciones:
             print(c.BOLD + ' INICIO DE SESIÓN.' + c.END)
             #PIDEO LOS DATOS DE INICIO DE SESIÓN
             if intento == 0:
-                print(' Ingresa tu usuario y password para accesar:\n')
+                print(' Ingresa tu Usuario y Password para accesar.\n')
             #MUESTRA QUE LOS DATOS INGRESADOS ESTÁN MAL
             else:
-                print(' Datos incorrectos, verifica el usuario y/o contraseña.\n')
+                print(' Datos incorrectos, verifica el Usuario y/o Password.\n')
 
             try:
                 username = input('  Usuario: ')
@@ -89,15 +89,11 @@ class Acciones:
 
                 #VALIDA QUE LOS DATOS DEL USUARIO HACEN MATCH EN LA BD
                 if username == login.username:
-                    print(login.username)
-                    print(f'\n¡Bienvenid@ {login.username}!')
-                    print(f'\n¡Haz iniciado sesión como {username} y contraseña'
-                                + f' {password}!\n')
                     validacion = False
                 
                     return login
 
             #REGRESA UN DATO NONE CUANDO LOS DATOS NO HACEN MATCH EN LA BD
             except AttributeError:
-                print(' Datos incorrectos, inténtalo de nuevo')
+                print(' Datos incorrectos, inténtalo de nuevo.')
                 intento = intento + 1

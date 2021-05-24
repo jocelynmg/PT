@@ -1,4 +1,4 @@
-import logoUAM
+import logoUAM, color
 from time import sleep
 import subprocess as sp
 
@@ -72,7 +72,10 @@ def evaluarEjercicio():
 
 
 def vistaEjercicio(usuario):
-    """Función que crea el Nivel 3"""
+    """Función que crea el Nivel 3 de retos"""
+
+    #SE INSTANCIA UN OBJETO COLOR PARA DAR FORMATO AL TEXTO
+    c = color.Color()
 
     #SE LIMPIA LA PANTALLA
     sp.run('clear')
@@ -91,7 +94,8 @@ def vistaEjercicio(usuario):
 
     print(sentencia)
 
-    input('Da enter para comenzar...')
+    input(c.BOLD + 'Da enter para comenzar...' + c.END)
+
     #SE COMIENZA A PREPARAR EL EJERCICIO
     print('\nPreparando tu escenario, espera a que aparezca el prompt.\n')
     
@@ -104,11 +108,12 @@ def vistaEjercicio(usuario):
     #SE MUESTRAN LOS CONTENEDORES ACTIVOS
     print('\n* Contenedores actualmente activos')
     sp.run(['docker','ps','-a'], capture_output=False, encoding='utf-8')
+    
     #SE MUESTRAN LAS IMAGENES CARGADAS
     print('\n* Imágenes actualmente cargadas')
     sp.run(['docker', 'images'])
     
-    cmd = input('\nTuPrompt$')
+    cmd = input(c.BOLD +'\n\nTuPrompt$ ' + c.END)
     #SE INTRODUCE EL COMANDO DEL USUARIO
     sp.run(cmd, capture_output=False, encoding='utf-8', shell=True)
     
